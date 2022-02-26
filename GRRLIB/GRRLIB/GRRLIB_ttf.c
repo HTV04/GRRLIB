@@ -25,11 +25,16 @@ THE SOFTWARE.
 #include <wchar.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_BITMAP_H
+#include <math.h>
+
+extern Mtx GXmodelView2D;
 
 static FT_Library ftLibrary; /**< A handle to a FreeType library instance. */
+static guVector axis = (guVector){0, 0, 1};
 
 // Static function prototypes
-static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u8 cR, const u8 cG, const u8 cB);
+static void DrawBitmap(FT_Bitmap *bitmap, const f32 offset, const f32 top, const f32 degrees, const f32 scaleX, const f32 scaleY, const u8 cR, const u8 cG, const u8 cB);
 
 
 /**
@@ -93,9 +98,12 @@ void  GRRLIB_FreeTTF (GRRLIB_ttfFont *myFont) {
  * @param myFont A TTF.
  * @param string Text to draw.
  * @param fontSize Size of the font.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Text color in RGBA format.
  */
-void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize, const u32 color) {
+void GRRLIB_PrintfTTF(const f32 x, const f32 y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color) {
     if (myFont == NULL || string == NULL) {
         return;
     }
@@ -106,7 +114,7 @@ void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, 
         length = mbstowcs(utf32, string, length);
         if (length > 0) {
             utf32[length] = L'\0';
-            GRRLIB_PrintfTTFW(x, y, myFont, utf32, fontSize, color);
+            GRRLIB_PrintfTTFW(x, y, myFont, utf32, fontSize, degrees, scaleX, scaleY, color);
         }
         free(utf32);
     }
@@ -120,16 +128,19 @@ void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, 
  * @param myFont A TTF.
  * @param utf32 Text to draw.
  * @param fontSize Size of the font.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Text color in RGBA format.
  */
-void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf32, unsigned int fontSize, const u32 color) {
+void GRRLIB_PrintfTTFW(const f32 x, const f32 y, GRRLIB_ttfFont *myFont, const wchar_t *utf32, unsigned int fontSize, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color) {
     if (myFont == NULL || utf32 == NULL) {
         return;
     }
 
     FT_Face Face = (FT_Face)myFont->face;
-    int penX = 0;
-    int penY = fontSize;
+    f32 penX = 0;
+    f32 penY = fontSize;
     FT_GlyphSlot slot = Face->glyph;
     FT_UInt glyphIndex;
     FT_UInt previousGlyph = 0;
@@ -147,17 +158,19 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
         if (myFont->kerning && previousGlyph && glyphIndex) {
             FT_Vector delta;
             FT_Get_Kerning(myFont->face, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
-            penX += delta.x >> 6;
+            penX += (f32) (delta.x >> 6) * scaleX;
         }
         if (FT_Load_Glyph(myFont->face, glyphIndex, FT_LOAD_RENDER) != 0) {
             continue;
         }
 
         DrawBitmap(&slot->bitmap,
-                   penX + slot->bitmap_left + x,
-                   penY - slot->bitmap_top + y,
+                   penX + (f32) slot->bitmap_left + x * sin(degrees) * scaleX,
+                   penY - (f32) slot->bitmap_top + y,
+                   degrees,
+                   scaleX, scaleY,
                    cR, cG, cB);
-        penX += slot->advance.x >> 6;
+        penX += (f32) (slot->advance.x >> 6);
         previousGlyph = glyphIndex;
     }
 }
@@ -167,15 +180,27 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
  * @param bitmap Bitmap to draw.
  * @param offset x-coordinate offset.
  * @param top y-coordinate.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param cR Red component of the colour.
  * @param cG Green component of the colour.
  * @param cB Blue component of the colour.
  */
-static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u8 cR, const u8 cG, const u8 cB) {
-    FT_Int i, j, p, q;
+static void DrawBitmap(FT_Bitmap *bitmap, const f32 offset, const f32 top, const f32 degrees, const f32 scaleX, const f32 scaleY, const u8 cR, const u8 cG, const u8 cB) {
+    Mtx m, m1, m2, mv;
+    f32 i, j;
+    FT_Int p, q;
     FT_Int x_max = offset + bitmap->width;
     FT_Int y_max = top + bitmap->rows;
 
+    guMtxIdentity(m1);
+    guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
+    guMtxRotAxisDeg(m2, &axis, degrees);
+    guMtxConcat(m2, m1, m);
+    guMtxConcat(GXmodelView2D, m, mv);
+
+    GX_LoadPosMtxImm(mv, GX_PNMTX0);
     for ( i = offset, p = 0; i < x_max; i++, p++ ) {
         for ( j = top, q = 0; j < y_max; j++, q++ ) {
             GX_Begin(GX_POINTS, GX_VTXFMT0, 1);
@@ -185,6 +210,7 @@ static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u8 cR, cons
             GX_End();
         }
     }
+    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 }
 
 /**

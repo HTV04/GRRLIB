@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2017 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,7 @@ THE SOFTWARE.
 
 extern  GRRLIB_drawSettings  GRRLIB_Settings;
 extern  Mtx                  GXmodelView2D;
-
-static  guVector  axis = (guVector){0, 0, 1};
+extern  guVector             axis2D;
 
 /**
  * Draw a texture.
@@ -64,7 +63,7 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, 
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    guMtxRotAxisDeg(m2, &axis, degrees);
+    guMtxRotAxisDeg(m2, &axis2D, degrees);
     guMtxConcat    (m2, m1, m);
 
     width  = tex->w * 0.5;
@@ -134,7 +133,7 @@ void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 c
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, 1, 1, 1.0);
-    guMtxRotAxisDeg(m2, &axis, 0);
+    guMtxRotAxisDeg(m2, &axis2D, 0);
     guMtxConcat    (m2, m1, m);
     guMtxConcat    (GXmodelView2D, m, mv);
 
@@ -209,7 +208,7 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
-    guMtxRotAxisDeg(m2, &axis, degrees);
+    guMtxRotAxisDeg(m2, &axis2D, degrees);
     guMtxConcat    (m2, m1, m);
 
     guMtxTransApply(m, m,
@@ -297,7 +296,7 @@ void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f3
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
-    guMtxRotAxisDeg(m2, &axis, degrees);
+    guMtxRotAxisDeg(m2, &axis2D, degrees);
     guMtxConcat    (m2, m1, m);
 
     guMtxTransApply(m, m,
@@ -374,7 +373,7 @@ void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, 1, 1, 1.0f);
-    guMtxRotAxisDeg(m2, &axis, 0);
+    guMtxRotAxisDeg(m2, &axis2D, 0);
     guMtxConcat    (m2, m1, m);
     guMtxConcat    (GXmodelView2D, m, mv);
 

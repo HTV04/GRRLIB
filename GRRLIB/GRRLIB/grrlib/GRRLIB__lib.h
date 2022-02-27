@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -124,6 +124,15 @@ void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f3
 void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color, const int frame);
 
 void  GRRLIB_Render  (void);
+
+//------------------------------------------------------------------------------
+// GRRLIB_transform.c - Coordinate system transformation functions
+void  GRRLIB_Scale         (f32 scaleX, f32 scaleY);
+void  GRRLIB_Rotate        (f32 degrees);
+void  GRRLIB_Translate     (f32 posX, f32 posY);
+void  GRRLIB_Transform     (f32 scaleX, f32 scaleY, f32 degrees, f32 posX, f32 posY);
+void  GRRLIB_TransformInv  (f32 scaleX, f32 scaleY, f32 posX, f32 posY, f32 degrees);
+void  GRRLIB_Origin        (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_snapshot.c - Create a texture containing a snapshot of a part of the framebuffer

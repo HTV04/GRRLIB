@@ -27,7 +27,28 @@ extern  Mtx                  GXmodelView2D;
 extern  guVector             axis2D;
 
 /**
- * Scale the coordinate system.
+ * Get the current matrix as a new matrix object.
+ * @return A handle to the matrix object.
+ * @see GRRLIB_matrix
+ */
+GRRLIB_matrix GRRLIB_GetMatrix (void) {
+    GRRLIB_matrix  matrixObject;
+
+    guMtxCopy(GXmodelView2D, matrixObject.matrix);
+
+    return matrixObject;
+}
+
+/**
+ * Set the current matrix using a matrix object.
+ * @param matrixObject The matrix object to set the matrix with.
+ */
+void GRRLIB_SetMatrix (GRRLIB_matrix *matrixObject) {
+    guMtxCopy(matrixObject->matrix, GXmodelView2D);
+}
+
+/**
+ * Scale the current matrix.
  * @param scaleX The scaling in the direction of the x-axis.
  * @param scaleY The scaling in the direction of the y-axis.
  */
@@ -42,8 +63,8 @@ void GRRLIB_Scale (f32 scaleX, f32 scaleY) {
 }
 
 /**
- * Rotate the coordinate system.
- * @param degrees The amount to rotate the coordinate system in degrees.
+ * Rotate the current matrix.
+ * @param degrees The amount to rotate the current matrix in degrees.
  */
 void GRRLIB_Rotate (f32 degrees) {
     Mtx  m;
@@ -55,7 +76,7 @@ void GRRLIB_Rotate (f32 degrees) {
 }
 
 /**
- * Translate the coordinate system.
+ * Translate the current matrix.
  * @param posX The translation relative to the x-axis.
  * @param posY The translation relative to the y-axis.
  */
@@ -70,10 +91,10 @@ void GRRLIB_Translate (f32 posX, f32 posY) {
 }
 
 /**
- * Transform the coordinate system (scale, rotate, then translate).
+ * Transform the current matrix (scale, rotate, then translate).
  * @param scaleX The scaling in the direction of the x-axis.
  * @param scaleY The scaling in the direction of the y-axis.
- * @param degrees The amount to rotate the coordinate system in degrees.
+ * @param degrees The amount to rotate the current matrix in degrees.
  * @param posX The translation relative to the x-axis.
  * @param posY The translation relative to the y-axis.
  */
@@ -91,12 +112,12 @@ void GRRLIB_Transform (f32 scaleX, f32 scaleY, f32 degrees, f32 posX, f32 posY) 
 }
 
 /**
- * Transform the coordinate system (scale, translate, then rotate).
+ * Transform the current matrix (scale, translate, then rotate).
  * @param scaleX The scaling in the direction of the x-axis.
  * @param scaleY The scaling in the direction of the y-axis.
  * @param posX The translation relative to the x-axis.
  * @param posY The translation relative to the y-axis.
- * @param degrees The amount to rotate the coordinate system in degrees.
+ * @param degrees The amount to rotate the current matrix in degrees.
  */
 void GRRLIB_TransformInv (f32 scaleX, f32 scaleY, f32 posX, f32 posY, f32 degrees) {
     Mtx m1, m2, m;
@@ -112,7 +133,7 @@ void GRRLIB_TransformInv (f32 scaleX, f32 scaleY, f32 posX, f32 posY, f32 degree
 }
 
 /**
- * Reset the coordinate system.
+ * Reset the current matrix.
  */
 void GRRLIB_Origin (void) {
     guMtxIdentity   (GXmodelView2D);

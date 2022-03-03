@@ -126,7 +126,7 @@ void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 
 void  GRRLIB_Render  (void);
 
 //------------------------------------------------------------------------------
-// GRRLIB_transform.c - Matrix transformation functions
+// GRRLIB_matrix.c - Matrix functions
 GRRLIB_matrix  GRRLIB_GetMatrix  (void);
 void  GRRLIB_SetMatrix           (GRRLIB_matrix *matrixObject);
 void  GRRLIB_Scale               (f32 scaleX, f32 scaleY);

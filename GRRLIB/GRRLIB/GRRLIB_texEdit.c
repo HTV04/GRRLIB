@@ -127,7 +127,6 @@ GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h)
         // Initialize the texture
         memset(my_texture->data, '\0', (h * w) << 2);
 
-        GRRLIB_SetHandle(my_texture, 0, 0);
         GRRLIB_FlushTex(my_texture);
     }
     return my_texture;
@@ -166,7 +165,6 @@ GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png) {
         if (my_texture->data != NULL) {
             my_texture->w = width;
             my_texture->h = height;
-            GRRLIB_SetHandle( my_texture, 0, 0 );
             if (imgProp.imgWidth != width || imgProp.imgHeight != height) {
                 // PNGU has resized the texture
                 memset(my_texture->data, 0, (my_texture->h * my_texture->w) << 2);
@@ -329,7 +327,6 @@ GRRLIB_texImg*  GRRLIB_LoadTextureBMP (const u8 *my_bmp) {
                 default:
                     GRRLIB_ClearTex(my_texture);
             }
-            GRRLIB_SetHandle( my_texture, 0, 0 );
             GRRLIB_FlushTex( my_texture );
         }
     }
@@ -406,7 +403,6 @@ GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int my_size) {
 
     my_texture->w = cinfo.output_width;
     my_texture->h = cinfo.output_height;
-    GRRLIB_SetHandle( my_texture, 0, 0 );
     GRRLIB_FlushTex( my_texture );
     return my_texture;
 }

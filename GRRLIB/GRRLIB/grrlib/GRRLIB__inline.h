@@ -88,11 +88,6 @@ INLINE  void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
                                  const u32 color, const bool filled);
 
 //------------------------------------------------------------------------------
-// GRRLIB_handle.h - Texture handle manipulation
-INLINE  void  GRRLIB_SetHandle (GRRLIB_texImg *tex, const int x, const int y);
-INLINE  void  GRRLIB_SetMidHandle (GRRLIB_texImg *tex, const bool enabled);
-
-//------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
 INLINE  u32   GRRLIB_GetPixelFromtexImg (const int x, const int y,
                                          const GRRLIB_texImg *tex);
@@ -124,7 +119,6 @@ INLINE  void            GRRLIB_FreeTexture        (GRRLIB_texImg *tex);
 #include <grrlib/GRRLIB_fbComplex.h>  // Render to framebuffer: Complex primitives
 #include <grrlib/GRRLIB_fbGX.h>       // Render to framebuffer: Simple GX wrapper
 #include <grrlib/GRRLIB_fbSimple.h>   // Render to framebuffer: Simple primitives
-#include <grrlib/GRRLIB_handle.h>     // Texture handle manipulation
 #include <grrlib/GRRLIB_pixel.h>      // Pixel manipulation
 #include <grrlib/GRRLIB_settings.h>   // GRRLIB Settings
 #include <grrlib/GRRLIB_texSetup.h>   // Setup for textures

@@ -107,10 +107,6 @@ typedef  struct GRRLIB_drawSettings {
 typedef  struct GRRLIB_texImg {
     u32    w;           /**< The width of the texture in pixels.  */
     u32    h;           /**< The height of the texture in pixels. */
-    int    handlex;     /**< Texture handle x. */
-    int    handley;     /**< Texture handle y. */
-    int    offsetx;     /**< Texture offset x. */
-    int    offsety;     /**< Texture offset y. */
 
     bool   tiledtex;    /**< Texture is tiled if set to true.   */
     u32    tilew;       /**< The width of one tile in pixels.   */

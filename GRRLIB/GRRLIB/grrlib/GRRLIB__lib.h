@@ -107,19 +107,20 @@ void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
 // GRRLIB_render.c - Rendering functions
 void  GRRLIB_DrawImg  (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color);
+                       const f32 offsetX, const f32 offsetY, const u32 color);
 
 void  GRRLIB_DrawImgQuad  (const guVector pos[4], GRRLIB_texImg *tex,
                            const u32 color);
 
 void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color, const int frame);
+                       const f32 offsetX, const f32 offsetY, const u32 color,
+                       const int frame);
 
 void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
                        const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color);
+                       const f32 offsetX, const f32 offsetY, const u32 color);
 
 void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color, const int frame);
 

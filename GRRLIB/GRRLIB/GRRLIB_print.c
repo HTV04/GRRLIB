@@ -53,7 +53,7 @@ void  GRRLIB_Printf (const f32 xpos, const f32 ypos,
     va_end(argp);
 
     for (i = 0; i < size; i++) {
-        GRRLIB_DrawTile(xpos+i*offset, ypos, tex, 0, zoom, zoom, color,
+        GRRLIB_DrawTile(xpos+i*offset, ypos, tex, 0, zoom, zoom, 0, 0, color,
             tmp[i] - tex->tilestart);
     }
 }

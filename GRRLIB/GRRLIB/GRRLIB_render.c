@@ -36,11 +36,13 @@ extern  guVector             axis2D;
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param offsetX Specifies the x-coordinate offset.
+ * @param offsetY Specifies the y-coordinate offset.
  * @param color Color in RGBA format.
  */
-void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color) {
+void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY, const u32 color) {
     GXTexObj  texObj;
-    u16       width, height;
+    u32       width, height;
     Mtx       m, m1, m2, mv;
 
     if (tex == NULL || tex->data == NULL)  return;
@@ -61,31 +63,24 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, 
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
     GX_SetVtxDesc(GX_VA_TEX0,   GX_DIRECT);
 
-    guMtxIdentity  (m1);
+    guMtxIdentity(m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
     guMtxRotAxisDeg(m2, &axis2D, degrees);
-    guMtxConcat    (m2, m1, m);
+    guMtxConcat    (m1, m2, m);
 
-    width  = tex->w * 0.5;
-    height = tex->h * 0.5;
+    width  = tex->w - offsetX;
+    height = tex->h - offsetY;
 
-    guMtxTransApply(m, m,
-        xpos +width  +tex->handlex
-            -tex->offsetx +( scaleX *(-tex->handley *sin(-DegToRad(degrees))
-                                      -tex->handlex *cos(-DegToRad(degrees))) ),
-        ypos +height +tex->handley
-            -tex->offsety +( scaleY *(-tex->handley *cos(-DegToRad(degrees))
-                                      +tex->handlex *sin(-DegToRad(degrees))) ),
-        0);
+    guMtxTransApply(m, m, xpos, ypos, 0);
     guMtxConcat(GXmodelView2D, m, mv);
 
     GX_LoadPosMtxImm(mv, GX_PNMTX0);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-        GX_Position3f32(-width, -height, 0);
+        GX_Position3f32(-offsetX, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(0, 0);
 
-        GX_Position3f32(width, -height, 0);
+        GX_Position3f32(width, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(1, 0);
 
@@ -93,7 +88,7 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, 
         GX_Color1u32   (color);
         GX_TexCoord2f32(1, 1);
 
-        GX_Position3f32(-width, height, 0);
+        GX_Position3f32(-offsetX, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(0, 1);
     GX_End();
@@ -169,10 +164,12 @@ void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 c
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param offsetX Specifies the x-coordinate offset.
+ * @param offsetY Specifies the y-coordinate offset.
  * @param color Color in RGBA format.
  * @param frame Specifies the frame to draw.
  */
-void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color, const int frame) {
+void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY, const u32 color, const int frame) {
     GXTexObj  texObj;
     f32       width, height;
     Mtx       m, m1, m2, mv;
@@ -203,40 +200,32 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
     GX_SetVtxDesc(GX_VA_TEX0,   GX_DIRECT);
 
-    width  = tex->tilew * 0.5f;
-    height = tex->tileh * 0.5f;
+    width  = tex->tilew * 0.5f - offsetX;
+    height = tex->tileh * 0.5f - offsetY;
 
     guMtxIdentity  (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
     guMtxRotAxisDeg(m2, &axis2D, degrees);
     guMtxConcat    (m2, m1, m);
 
-    guMtxTransApply(m, m,
-        xpos +width  +tex->handlex
-            -tex->offsetx +( scaleX *(-tex->handley *sin(-DegToRad(degrees))
-                                      -tex->handlex *cos(-DegToRad(degrees))) ),
-        ypos +height +tex->handley
-            -tex->offsety +( scaleY *(-tex->handley *cos(-DegToRad(degrees))
-                                      +tex->handlex *sin(-DegToRad(degrees))) ),
-        0);
-
+    guMtxTransApply(m, m, xpos, ypos, 0);
     guMtxConcat(GXmodelView2D, m, mv);
 
     GX_LoadPosMtxImm(mv, GX_PNMTX0);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-        GX_Position3f32(-width, -height, 0);
+        GX_Position3f32(-offsetX, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s1, t1);
 
-        GX_Position3f32(width, -height,  0);
+        GX_Position3f32(width, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s2, t1);
 
-        GX_Position3f32(width, height,  0);
+        GX_Position3f32(width, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s2, t2);
 
-        GX_Position3f32(-width, height,  0);
+        GX_Position3f32(-offsetX, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s1, t2);
     GX_End();
@@ -258,9 +247,11 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param offsetX Specifies the x-coordinate offset.
+ * @param offsetY Specifies the y-coordinate offset.
  * @param color Color in RGBA format.
  */
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color) {
+void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY, const u32 color) {
     GXTexObj  texObj;
     f32       width, height;
     Mtx       m, m1, m2, mv;
@@ -299,32 +290,24 @@ void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f3
     guMtxRotAxisDeg(m2, &axis2D, degrees);
     guMtxConcat    (m2, m1, m);
 
-    guMtxTransApply(m, m,
-        xpos +width  +tex->handlex
-            -tex->offsetx +( scaleX *(-tex->handley *sin(-DegToRad(degrees))
-                                      -tex->handlex *cos(-DegToRad(degrees))) ),
-        ypos +height +tex->handley
-            -tex->offsety +( scaleY *(-tex->handley *cos(-DegToRad(degrees))
-                                      +tex->handlex *sin(-DegToRad(degrees))) ),
-        0);
-
+    guMtxTransApply(m, m, xpos, ypos, 0);
     guMtxConcat(GXmodelView2D, m, mv);
 
     GX_LoadPosMtxImm(mv, GX_PNMTX0);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-        GX_Position3f32(-width, -height, 0);
+        GX_Position3f32(-offsetX, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s1, t1);
 
-        GX_Position3f32(width, -height,  0);
+        GX_Position3f32(width, -offsetY, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s2, t1);
 
-        GX_Position3f32(width, height,  0);
+        GX_Position3f32(width, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s2, t2);
 
-        GX_Position3f32(-width, height,  0);
+        GX_Position3f32(-offsetX, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(s1, t2);
     GX_End();

@@ -80,7 +80,6 @@ void  GRRLIB_BMFX_Grayscale (const GRRLIB_texImg *texsrc,
                 (gray << 24) | (gray << 16) | (gray << 8) | (A(color)));
         }
     }
-    GRRLIB_SetHandle(texdest, 0, 0);
 }
 
 /**
@@ -107,7 +106,6 @@ void  GRRLIB_BMFX_Sepia (const GRRLIB_texImg *texsrc, GRRLIB_texImg *texdest) {
                                     RGBA(sr, sg, sb, A(color)));
         }
     }
-    GRRLIB_SetHandle(texdest, 0, 0);
 }
 /**
  * Invert colors of the texture.

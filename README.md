@@ -2,7 +2,7 @@
 ## Table of Contents
 * [Introduction](#introduction)
   * ...What is it?
-* [Developing for the Wii/Gamecube](#developing-for-the-wii_gamecube)
+* [Developing for the Wii/GameCube](#developing-for-the-wiigamecube)
   * ...How do I even start?
 * [Downloading GRRLIB-mod](#downloading-grrlib-mod)
   * ...Where do I get it from?
@@ -16,7 +16,7 @@
   * ...It's the MIT one!
 
 ## Introduction
-GRRLIB-mod is a C/C++ 2D/3D graphics library based on [GRRLIB](https://github.com/GRRLIB/GRRLIB) for Wii/Gamecube application developers. It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
+GRRLIB-mod is a C/C++ 2D/3D graphics library based on [GRRLIB](https://github.com/GRRLIB/GRRLIB) for Wii/GameCube application developers. It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
 
 GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrrlib-mod". Because GRRLIB processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
 
@@ -29,7 +29,7 @@ libgrrlib-mod      <- 2D/3D graphics library
 └── libfreetype    <- TrueType font processor
 ```
 
-## Developing for the Wii/Gamecube
+## Developing for the Wii/GameCube
 Do not progress until you have installed and configured devkitPro. Guides are and assistance are available at <https://devkitpro.org/index.php>
 
 If you have just performed a clean (re)install, you should reboot before you continue.

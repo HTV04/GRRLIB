@@ -1,24 +1,24 @@
-﻿# GRRLIB-mod
+# GRRLIB-mod
 ## Table of Contents
 * [Introduction](#introduction)
   * ...What is it?
-* [Developing for the Wii](#developing-for-the-wii)
+* [Developing for the Wii/Gamecube](#developing-for-the-wii_gamecube)
   * ...How do I even start?
-* [Downloading GRRLIB](#downloading-grrlib)
+* [Downloading GRRLIB-mod](#downloading-grrlib-mod)
   * ...Where do I get it from?
-* [Installing GRRLIB](#installing-grrlib)
+* [Installing GRRLIB-mod](#installing-grrlib-mod)
   * ...How do I get it to a useable state?
 * [Using GRRLIB-mod](#using-grrlib-mod)
   * ...What essentials do I need to know to get going?
-* [Credits](#credits)
-  * ...Who do I thank for all this free stuff?
-* [Licence](#licence)
-  * ...When you say "free" do you actually mean something else?
+* [GRRLIB Credits](#grrlib-credits)
+  * ...Who do I thank for creating all this free stuff?
+* [License](#license)
+  * ...It's the MIT one!
 
 ## Introduction
 GRRLIB-mod is a C/C++ 2D/3D graphics library based on [GRRLIB](https://github.com/GRRLIB/GRRLIB) for Wii/Gamecube application developers. It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
 
-GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called 'libgrrlib-mod'. Because GRRLIB processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
+GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrrlib-mod". Because GRRLIB processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
 
 ```
 libgrrlib-mod      <- 2D/3D graphics library
@@ -35,7 +35,7 @@ Do not progress until you have installed and configured devkitPro. Guides are an
 If you have just performed a clean (re)install, you should reboot before you continue.
 
 ## Downloading GRRLIB-mod
-It is recommended to use the master branch of GRRLIB-mod. Simply clone this repository to your computer.
+It is recommended to use the `mod` branch of the GRRLIB-mod repo. Simply clone this repository to your computer and switch to the `mod` branch.
 
 This document will presume that you have clone this repository to a directory called  `C:\grr` for simplicity.
 
@@ -101,7 +101,7 @@ to the libs line in your Makefile.
 
 Remember the order of the libraries is critical. You may (need to) insert other libraries in the middle of the list, you may need to add others to the start, or even the end, but do *not* change the order of the libraries shown here.
 
-Also add $(PORTLIBS) to the LIBDIRS line in your makefile
+Also add `$(PORTLIBS)` to the `LIBDIRS` line in your makefile
 
 You do NOT need to place anything in your application directory.
 

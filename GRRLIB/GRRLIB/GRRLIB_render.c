@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2022 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 #include <math.h>
 
-#include <grrlib.h>
+#include <grrlib-mod.h>
 
 extern  GRRLIB_drawSettings  GRRLIB_Settings;
 extern  Mtx                  GXmodelView2D;

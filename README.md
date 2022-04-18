@@ -1,11 +1,5 @@
-﻿# GRRLIB
-
-[![Continuous Integration](https://github.com/GRRLIB/GRRLIB/workflows/Continuous%20Integration/badge.svg)](https://github.com/GRRLIB/GRRLIB/actions)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5b2983faefbf443eaa5705e7cc6e5f68)](https://www.codacy.com/app/Crayon2000/GRRLIB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GRRLIB/GRRLIB&amp;utm_campaign=Badge_Grade)
-[![Join the chat at https://gitter.im/GRRLIB/GRRLIB](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GRRLIB/GRRLIB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+﻿# GRRLIB-mod
 ## Table of Contents
-
 * [Introduction](#introduction)
   * ...What is it?
 * [Developing for the Wii](#developing-for-the-wii)
@@ -14,33 +8,20 @@
   * ...Where do I get it from?
 * [Installing GRRLIB](#installing-grrlib)
   * ...How do I get it to a useable state?
-* [Using GRRLIB](#using-grrlib)
+* [Using GRRLIB-mod](#using-grrlib-mod)
   * ...What essentials do I need to know to get going?
-* [Upgrading to v4.4.0 From Previous Versions of GRRLIB](#upgrading-to-v440-from-previous-versions-of-grrlib)
-  * ...I upgraded and now my programs won't compile properly!?
-* [Using GitHub](#using-github)
-  * ...What is this Git thing that the L337 devs keep talking about?
 * [Credits](#credits)
   * ...Who do I thank for all this free stuff?
 * [Licence](#licence)
   * ...When you say "free" do you actually mean something else?
 
 ## Introduction
+GRRLIB-mod is a C/C++ 2D/3D graphics library based on [GRRLIB](https://github.com/GRRLIB/GRRLIB) for Wii/Gamecube application developers. It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
 
-GRRLIB is a C/C++ 2D/3D graphics library for Wii application developers.  It is
-essentially a wrapper which presents a friendly interface to the Nintendo GX
-core.
+GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called 'libgrrlib-mod'. Because GRRLIB processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
 
-GRRLIB is supplied as a standard C/C++ library (aka. archive)
-called 'libgrrlib'.  Because GRRLIB processes JPEG and PNG images, it requires
-the installation of the 'libjpeg' and 'libpngu' libraries.  'libpngu', in turn,
-requires 'libpng'.  GRRLIB has FileIO functions
-to allow real-time loading and saving of graphical data, and thus requires
-'libfat'.  GRRLIB also has the possibility to use TrueType fonts, so
-'libfreetype' is also required.
-
-```text
-libgrrlib          <- 2D/3D graphics library
+```
+libgrrlib-mod      <- 2D/3D graphics library
 ├── libfat         <- File I/O
 ├── libjpeg        <- JPEG image processor
 ├── libpngu        <- Wii wrapper for libpng
@@ -48,29 +29,19 @@ libgrrlib          <- 2D/3D graphics library
 └── libfreetype    <- TrueType font processor
 ```
 
-## Developing for the Wii
+## Developing for the Wii/Gamecube
+Do not progress until you have installed and configured devkitPro. Guides are and assistance are available at <https://devkitpro.org/index.php>
 
-Do not progress until you have installed and configured devkitPro.  Guides are
-and assistance are available at <https://devkitpro.org/index.php>
+If you have just performed a clean (re)install, you should reboot before you continue.
 
-If you have just performed a clean (re)install on your Windows PC, be sure to
-reboot before you continue.
+## Downloading GRRLIB-mod
+It is recommended to use the master branch of GRRLIB-mod. Simply clone this repository to your computer.
 
-## Downloading GRRLIB
+This document will presume that you have clone this repository to a directory called  `C:\grr` for simplicity.
 
-You are invited to use "the latest Git master version" of GRRLIB at all times.
+## Installing GRRLIB-mod
+This guide is for Windows. If you are using macOS, Linux, or another compatible operating system, you will need to convert these instructions.
 
-The Git repository is located at: <https://github.com/GRRLIB/GRRLIB>
-
-There is a simple guide to "Using GitHub" later in this document.
-
-This document will presume that you have downloaded "the latest Git master
-version" to a directory called  C:\grr
-
-## Installing GRRLIB
-
-This guide is for Windows.  If you are using Linux, I am going to presume you
-are smart enough to convert these instructions.
 ```text
 GRRLIB      is supplied as source code
 libpngu     is supplied as source code
@@ -80,27 +51,24 @@ libjpeg     is supplied via devkitPro pacman (ppc-libjpeg-turbo)
 libfat      is supplied via devkitPro pacman (libfat-ogc)
 ```
 
-The easy way is to install GRRLIB and all the required libraries in a single
-command:
+The easy way is to install GRRLIB and all the required libraries in a single command:
 ```bash
   c:
   cd \grr\GRRLIB
-  pacman --sync --needed --noconfirm libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
+  pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
   make clean all install
 ```
 
 This process may take some time depending on the speed of your PC.
 
-If you used the method above the following steps are not required, GRRLIB is
-installed and you are ready to start developing Wii homebrew games.
-
-If you want, you could install the libfat, libpng,
-libfreetype and libjpeg with there dependencies in a single command:
-```bash
-  pacman --sync --needed --noconfirm libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
-```
+If you used the method above the following steps are not required, GRRLIB-mod is installed and you are ready to start developing Wii/GameCube homebrew games.
 
 Each library could also be installed individually:
+
+Install libfat, libpng, libfreetype and libjpeg with their dependencies:
+```bash
+  pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
+```
 
 To install libpngu:
 ```bash
@@ -109,100 +77,42 @@ To install libpngu:
   make clean all install
 ```
 
-To install libgrrlib for Wii:
+To install libgrrlib-mod for Wii:
 ```bash
   c:
   cd \grr\GRRLIB\GRRLIB
   make clean all install
 ```
 
-To install libgrrlib for GameCube:
+To install libgrrlib-mod for GameCube:
 ```bash
   c:
   cd \grr\GRRLIB\GRRLIB
   make PLATFORM=cube clean all install
 ```
 
-## Using GRRLIB
-
+## Using GRRLIB-mod
 After everything is installed, simply put
 ```c
-#include <grrlib.h>
+#include <grrlib-mod.h>
 ```
 at the top of your .c/.cpp file and use the functions as required
 
-You will need to add
+You will need to add:
 ```make
--lgrrlib -lfreetype -lbz2 -lfat -ljpeg -lpngu -lpng -lz
+-lgrrlib-mod -lfreetype -lbz2 -lfat -ljpeg -lpngu -lpng -lz
 ```
-to the libs line in your makefile
+to the libs line in your Makefile.
 
-...Remember the order of the libraries is critical.  You may (need to) insert
-other libraries in the middle of the list, you may need to add others to the
-start, or even the end - but do _not_ change the order of the libraries shown
-here.
+Remember the order of the libraries is critical. You may (need to) insert other libraries in the middle of the list, you may need to add others to the start, or even the end, but do *not* change the order of the libraries shown here.
 
 Also add $(PORTLIBS) to the LIBDIRS line in your makefile
 
-You do NOT need to place /anything/ in your application directory.
+You do NOT need to place anything in your application directory.
 
-If you would like to see a working example of this, you can look at the example
-found in: C:\grr\examples\template\source
+If you would like to see a working example of this, you can look at the example found in: C:\grr\examples\template\source
 
-## Upgrading to v4.4.0 From Previous Versions of GRRLIB
-
-This version now uses the ported libraries for the Wii.
-
-To install them, use this command line:
-
-```bash
-  pacman --sync --needed --noconfirm libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
-```
-
-You will need to add $(PORTLIBS) to the LIBDIRS line in your makefile.
-
-Previously it could have looked like this:
-
-```make
-LIBDIRS	:=
-```
-
-Now it needs to be like this:
-
-```make
-LIBDIRS	:= $(PORTLIBS)
-```
-
-The FreeType library is now compiled with a dependency on bzip2,
-so lbz2 needs to be added after lfreetype in your makefile.
-
-For example:
-
-```make
-LIBS	:= -lgrrlib -lfreetype -lbz2 -lpngu -lpng -ljpeg -lz -lfat
-```
-
-Since GRRLIB and libpngu are now installed into the porlibs folder, make sure you don't have any leftovers from previous installations.
-You will need to manually delete unneeded libraries in _devkitPro\libogc\lib\wii_ as well as include files in _devkitPro\libogc\include_
-
-## Using GitHub
-
-GitHub allows the developers to submit changes to the code in such a way that
-these changes can be easily monitored, quickly merged together with other
-changes. and (if necessary) reverted.
-
-It also allows the power-users to gain access to the latest (often "in-test")
-features.
-
-To obtain the "cutting edge" codebase go to <https://github.com/GRRLIB/GRRLIB/tree/master>
-
-1. Create a directory to hold the code (e.g. C:\grr)
-2. Click the _Download ZIP_ button if you don't have the proper tools installed on your PC or Clone the following URL <https://github.com/GRRLIB/GRRLIB.git>
-
-All official releases can be found here <https://github.com/GRRLIB/GRRLIB/releases>
-
-## Credits
-
+## GRRLIB Credits
 ### Project Leader
 * NoNameNo
 
@@ -224,16 +134,5 @@ All official releases can be found here <https://github.com/GRRLIB/GRRLIB/releas
 * RedShade
 * Jespa
 
-## Licence
-
-GRRLIB is released under the [MIT Licence](LICENCE.md).
-If we had chosen the GPL licence you would be +forced+ (legally required) to release your source code.
-But in the spirit of "free as in FREE" we have left you with the +option+ to release your
-source code.
-
-We do +request+ that you tell others about us by naming our library (GRRLIB) in
-the credits of your game/application.  And, if you +choose+ to do that, we
-encourage you to use our logo to achieve it; You can find our logo here:
-C:\grr\docs\grrlib_logo.png
-and here:
-<https://grrlib.github.io/GRRLIB/grrlib_logo.png>
+## License
+GRRLIB-mod is released under the [MIT License](LICENSE).

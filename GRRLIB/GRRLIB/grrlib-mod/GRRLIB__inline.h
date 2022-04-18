@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2017 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -114,14 +114,14 @@ INLINE  void            GRRLIB_FreeTexture        (GRRLIB_texImg *tex);
 //==============================================================================
 // Definitions of inlined functions
 //==============================================================================
-#include <grrlib/GRRLIB_clipping.h>   // Clipping control
-#include <grrlib/GRRLIB_collision.h>  // Collision detection
-#include <grrlib/GRRLIB_fbComplex.h>  // Render to framebuffer: Complex primitives
-#include <grrlib/GRRLIB_fbGX.h>       // Render to framebuffer: Simple GX wrapper
-#include <grrlib/GRRLIB_fbSimple.h>   // Render to framebuffer: Simple primitives
-#include <grrlib/GRRLIB_pixel.h>      // Pixel manipulation
-#include <grrlib/GRRLIB_settings.h>   // GRRLIB Settings
-#include <grrlib/GRRLIB_texSetup.h>   // Setup for textures
+#include <grrlib-mod/GRRLIB_clipping.h>   // Clipping control
+#include <grrlib-mod/GRRLIB_collision.h>  // Collision detection
+#include <grrlib-mod/GRRLIB_fbComplex.h>  // Render to framebuffer: Complex primitives
+#include <grrlib-mod/GRRLIB_fbGX.h>       // Render to framebuffer: Simple GX wrapper
+#include <grrlib-mod/GRRLIB_fbSimple.h>   // Render to framebuffer: Simple primitives
+#include <grrlib-mod/GRRLIB_pixel.h>      // Pixel manipulation
+#include <grrlib-mod/GRRLIB_settings.h>   // GRRLIB Settings
+#include <grrlib-mod/GRRLIB_texSetup.h>   // Setup for textures
 
 #endif // __GRRLIB_FNINLINE_H__
 /** @} */ // end of group

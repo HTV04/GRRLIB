@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2017 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +21,24 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 /*
- * @file GRRLIB_fbComplex.h
- * Inline functions for complex (N-point) shape drawing.
+ * @file GRRLIB_fbGX.h
+ * Inline functions for interfacing directly to the GX Engine.
  */
 
 /**
- * Draw an array of points.
- * @param v Array containing the points.
- * @param color The color of the points in RGBA format.
- * @param n Number of points in the vector array.
- */
-INLINE
-void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_POINTS);
-}
-
-/**
- * Draw a polygon.
- * @param v The vector containing the coordinates of the polygon.
- * @param color The color of the filled polygon in RGBA format.
+ * Draws a vector.
+ * @param v The vector to draw.
+ * @param color The color of the vector in RGBA format.
  * @param n Number of points in the vector.
+ * @param fmt Type of primitive.
  */
 INLINE
-void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
-}
-
-/**
- * Draw a filled polygon.
- * @param v The vector containing the coordinates of the polygon.
- * @param color The color of the filled polygon in RGBA format.
- * @param n Number of points in the vector.
- */
-INLINE
-void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
+void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
+                       const u8 fmt) {
+    GX_Begin(fmt, GX_VTXFMT0, n);
+    for (int i = 0; i < n; i++) {
+        GX_Position3f32(v[i].x, v[i].y, v[i].z);
+        GX_Color1u32(color[i]);
+    }
+    GX_End();
 }

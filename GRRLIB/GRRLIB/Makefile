@@ -32,7 +32,7 @@ PWD     := $(subst $(NULLSTR) ,\ ,$(shell pwd))
 INCLUDE	:= -I../lib/pngu -I$(PWD) -I$(LIBOGC_INC) -I$(DEVKITPRO)/portlibs/ppc/include -I$(DEVKITPRO)/portlibs/ppc/include/freetype2
 CFLAGS  := -O2 -Wall $(MACHDEP) $(INCLUDE)
 
-LIB		:= grrlib
+LIB		:= grrlib-mod
 CFILES	:= $(wildcard *.c)
 OFILES	:= $(CFILES:.c=.o)
 DEPENDS	:= $(OFILES:.o=.d)
@@ -49,7 +49,7 @@ clean :
 	rm -f $(OFILES) $(DEPENDS) $(ARC)
 
 install :
-	mkdir -p  $(INSTALL_LIB)  $(INSTALL_INC)  $(INSTALL_INC)/grrlib
+	mkdir -p  $(INSTALL_LIB)  $(INSTALL_INC)  $(INSTALL_INC)/grrlib-mod
 	cp -f $(ARC) $(INSTALL_LIB)/
 	cp -f $(HDR) $(INSTALL_INC)/
-	cp -f $(INL) $(INSTALL_INC)/grrlib
+	cp -f $(INL) $(INSTALL_INC)/grrlib-mod

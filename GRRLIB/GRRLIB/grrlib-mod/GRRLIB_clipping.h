@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,29 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 /*
- * @file GRRLIB_texSetup.h
- * Inline functions for the basic manipulation of textures.
+ * @file GRRLIB_clipping.h
+ * Inline functions to control clipping.
  */
-
-#include <malloc.h>
-#include <string.h>
 
 /**
- * Write the contents of a texture in the data cache down to main memory.
- * For performance the CPU holds a data cache where modifications are stored before they get written down to main memory.
- * @param tex The texture to flush.
+ * Reset the clipping to normal.
  */
 INLINE
-void  GRRLIB_FlushTex (GRRLIB_texImg *tex) {
-    DCFlushRange(tex->data, tex->w * tex->h * 4);
+void  GRRLIB_ClipReset (void) {
+    GX_SetClipMode( GX_CLIP_ENABLE );
+    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
 }
 
 /**
- * Free memory allocated for texture.
- * If \a tex is a null pointer, the function does nothing.
- * @note This function does not change the value of \a tex itself, hence it still points to the same (now invalid) location.
- * @param tex A GRRLIB_texImg structure.
+ * Clip the drawing area to an rectangle.
+ * @param x The x-coordinate of the rectangle.
+ * @param y The y-coordinate of the rectangle.
+ * @param width The width of the rectangle.
+ * @param height The height of the rectangle.
  */
 INLINE
-void  GRRLIB_FreeTexture (GRRLIB_texImg *tex) {
-    if(tex != NULL) {
-        if (tex->data != NULL) {
-            free(tex->data);
-        }
-        free(tex);
-    }
-}
-
-/**
- * Clear a texture to transparent black.
- * @param tex Texture to clear.
- */
-INLINE
-void  GRRLIB_ClearTex(GRRLIB_texImg* tex) {
-    memset(tex->data, 0, (tex->h * tex->w) << 2);
-    GRRLIB_FlushTex(tex);
+void  GRRLIB_ClipDrawing (const int x, const int y,
+                          const int width, const int height) {
+    GX_SetClipMode( GX_CLIP_ENABLE );
+    GX_SetScissor( x, y, width, height );
 }

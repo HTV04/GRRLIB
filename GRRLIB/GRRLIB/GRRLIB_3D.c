@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 #include <math.h>
 
-#include <grrlib.h>
+#include <grrlib-mod.h>
 
 // User should not directly modify these
 Mtx       _GRR_view;  // Should be static as soon as all light functions needing this var will be in this file ;)

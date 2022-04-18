@@ -1,7 +1,7 @@
 # Folder
-build
+/build/*
 
-# Compiler-generated binarie
+# Compiler-generated binaries
 *.o
 *.d
 *.map

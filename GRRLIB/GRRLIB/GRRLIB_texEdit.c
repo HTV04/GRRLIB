@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include <jpeglib.h>
 #include <string.h>
 
-#include <grrlib.h>
+#include <grrlib-mod.h>
 
 /**
  * This structure contains information about the type, size, and layout of a file that containing a device-independent bitmap (DIB).

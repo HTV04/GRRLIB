@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2017 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,39 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 /*
- * @file GRRLIB_clipping.h
- * Inline functions to control clipping.
+ * @file GRRLIB_fbComplex.h
+ * Inline functions for complex (N-point) shape drawing.
  */
 
 /**
- * Reset the clipping to normal.
+ * Draw an array of points.
+ * @param v Array containing the points.
+ * @param color The color of the points in RGBA format.
+ * @param n Number of points in the vector array.
  */
 INLINE
-void  GRRLIB_ClipReset (void) {
-    GX_SetClipMode( GX_CLIP_ENABLE );
-    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
+    GRRLIB_GXEngine(v, color, n, GX_POINTS);
 }
 
 /**
- * Clip the drawing area to an rectangle.
- * @param x The x-coordinate of the rectangle.
- * @param y The y-coordinate of the rectangle.
- * @param width The width of the rectangle.
- * @param height The height of the rectangle.
+ * Draw a polygon.
+ * @param v The vector containing the coordinates of the polygon.
+ * @param color The color of the filled polygon in RGBA format.
+ * @param n Number of points in the vector.
  */
 INLINE
-void  GRRLIB_ClipDrawing (const int x, const int y,
-                          const int width, const int height) {
-    GX_SetClipMode( GX_CLIP_ENABLE );
-    GX_SetScissor( x, y, width, height );
+void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
+    GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
+}
+
+/**
+ * Draw a filled polygon.
+ * @param v The vector containing the coordinates of the polygon.
+ * @param color The color of the filled polygon in RGBA format.
+ * @param n Number of points in the vector.
+ */
+INLINE
+void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[], const long n) {
+    GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
 }

@@ -20,40 +20,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-#include <math.h>
+/*
+ * @file GRRLIB_texSetup.h
+ * Inline functions for the basic manipulation of textures.
+ */
 
-#include <grrlib-mod.h>
+#include <malloc.h>
+#include <string.h>
 
 /**
- * Draw a circle.
- * @author Dark_Link
- * @param x Specifies the x-coordinate of the circle.
- * @param y Specifies the y-coordinate of the circle.
- * @param radius The radius of the circle.
- * @param color The color of the circle in RGBA format.
- * @param filled Set to true to fill the circle.
+ * Write the contents of a texture in the data cache down to main memory.
+ * For performance the CPU holds a data cache where modifications are stored before they get written down to main memory.
+ * @param tex The texture to flush.
  */
-void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
-                     const u32 color, const u8 filled) {
-    guVector v[36];
-    u32 ncolor[36];
-    u32 a;
-    f32 ra;
-    f32 G_DTOR = M_DTOR * 10;
+INLINE
+void  GRRLIB_FlushTex (GRRLIB_texImg *tex) {
+    DCFlushRange(tex->data, tex->w * tex->h * 4);
+}
 
-    for (a = 0; a < 36; a++) {
-        ra = a * G_DTOR;
+/**
+ * Free memory allocated for texture.
+ * If \a tex is a null pointer, the function does nothing.
+ * @note This function does not change the value of \a tex itself, hence it still points to the same (now invalid) location.
+ * @param tex A GRRLIB_texImg structure.
+ */
+INLINE
+void  GRRLIB_FreeTexture (GRRLIB_texImg *tex) {
+    if(tex != NULL) {
+        if (tex->data != NULL) {
+            free(tex->data);
+        }
+        free(tex);
+    }
+}
 
-        v[a].x = cos(ra) * radius + x;
-        v[a].y = sin(ra) * radius + y;
-        v[a].z = 0.0f;
-        ncolor[a] = color;
-    }
-
-    if (filled == false) {
-        GRRLIB_GXEngine(v, ncolor, 36, GX_LINESTRIP  );
-    }
-    else {
-        GRRLIB_GXEngine(v, ncolor, 36, GX_TRIANGLEFAN);
-    }
+/**
+ * Clear a texture to transparent black.
+ * @param tex Texture to clear.
+ */
+INLINE
+void  GRRLIB_ClearTex(GRRLIB_texImg* tex) {
+    memset(tex->data, 0, (tex->h * tex->w) << 2);
+    GRRLIB_FlushTex(tex);
 }

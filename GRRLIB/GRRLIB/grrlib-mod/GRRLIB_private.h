@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,30 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 /*
- * @file GRRLIB_fbGX.h
- * Inline functions for interfacing directly to the GX Engine.
+ * @file GRRLIB_private.h
+ * The symbols declared in this file are PRIVATE.
+ * They are not part of the GRRLIB public
+ * interface, and are not recommended for use by regular applications.
+ * Some of them may become public in the future; others may stay private,
+ * change in an incompatible way, or even disappear.
  */
 
+#ifndef __GRRLIB_PRIVATE_H__
+#define __GRRLIB_PRIVATE_H__
+
+#include <ogc/libversion.h>
+
 /**
- * Draws a vector.
- * @param v The vector to draw.
- * @param color The color of the vector in RGBA format.
- * @param n Number of points in the vector.
- * @param fmt Type of primitive.
+ * Used for version checking.
+ * @param a Major version number.
+ * @param b Minor version number.
+ * @param c Revision version number.
  */
-INLINE
-void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
-                       const u8 fmt) {
-    GX_Begin(fmt, GX_VTXFMT0, n);
-    for (int i = 0; i < n; i++) {
-        GX_Position3f32(v[i].x, v[i].y, v[i].z);
-        GX_Color1u32(color[i]);
-    }
-    GX_End();
-}
+#define GRRLIB_VERSION(a,b,c) ((a)*65536+(b)*256+(c))
+
+//------------------------------------------------------------------------------
+// GRRLIB_ttf.c - FreeType function for GRRLIB
+int GRRLIB_InitTTF();
+void GRRLIB_ExitTTF();
+
+#endif // __GRRLIB_PRIVATE_H__

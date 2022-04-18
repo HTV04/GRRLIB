@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2022 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team and HTV04
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@ THE SOFTWARE.
 #include <fat.h>
 
 #define __GRRLIB_CORE__
-#include <grrlib.h>
-#include "grrlib/GRRLIB_private.h"
+#include <grrlib-mod.h>
+#include "grrlib-mod/GRRLIB_private.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024) /**< GX fifo buffer size. */
 

@@ -60,27 +60,28 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, 
     }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
-    GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GX_SetVtxDesc(GX_VA_TEX0,   GX_DIRECT);
 
-    guMtxIdentity(m1);
-    guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    guMtxRotAxisDeg(m2, &axis2D, degrees);
-    guMtxConcat    (m1, m2, m);
+    guMtxRotAxisDeg(m1, &axis2D, degrees);
+    guMtxIdentity(m2);
+    guMtxTransApply(m2, m2, -offsetX, -offsetY, 0.0);
+    guMtxScaleApply(m2, m2, scaleX, scaleY, 1.0);
+    guMtxConcat(m1, m2, m);
 
-    width  = tex->w - offsetX;
-    height = tex->h - offsetY;
-
-    guMtxTransApply(m, m, xpos, ypos, 0);
+    guMtxTransApply(m, m, xpos, ypos, 0.0);
     guMtxConcat(GXmodelView2D, m, mv);
+
+    width  = tex->w;
+    height = tex->h;
 
     GX_LoadPosMtxImm(mv, GX_PNMTX0);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-        GX_Position3f32(-offsetX, -offsetY, 0);
+        GX_Position3f32(0, 0, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(0, 0);
 
-        GX_Position3f32(width, -offsetY, 0);
+        GX_Position3f32(width, 0, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(1, 0);
 
@@ -88,7 +89,7 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, 
         GX_Color1u32   (color);
         GX_TexCoord2f32(1, 1);
 
-        GX_Position3f32(-offsetX, height, 0);
+        GX_Position3f32(0, height, 0);
         GX_Color1u32   (color);
         GX_TexCoord2f32(0, 1);
     GX_End();

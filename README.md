@@ -44,17 +44,19 @@ This guide is for Windows. If you are using macOS, Linux, or another compatible 
 
 ```text
 GRRLIB      is supplied as source code
-libpngu     is supplied as source code
+libpngu     is available from the original GRRLIB repo
 libpng      is supplied via devkitPro pacman (ppc-libpng)
 libfreetype is supplied via devkitPro pacman (ppc-freetype)
 libjpeg     is supplied via devkitPro pacman (ppc-libjpeg-turbo)
 libfat      is supplied via devkitPro pacman (libfat-ogc)
 ```
 
+libpngu can be compiled and installed using the [instructions from the original GRRLIB repo](https://github.com/GRRLIB/GRRLIB#installing-grrlib).
+
 The easy way is to install GRRLIB and all the required libraries in a single command:
 ```bash
   c:
-  cd \grr\GRRLIB
+  cd \grr\src
   pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
   make clean all install
 ```
@@ -70,24 +72,17 @@ Install libfat, libpng, libfreetype and libjpeg with their dependencies:
   pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
 ```
 
-To install libpngu:
-```bash
-  c:
-  cd \grr\GRRLIB\lib\pngu
-  make clean all install
-```
-
 To install libgrrlib-mod for Wii:
 ```bash
   c:
-  cd \grr\GRRLIB\GRRLIB
+  cd \grr\src
   make clean all install
 ```
 
 To install libgrrlib-mod for GameCube:
 ```bash
   c:
-  cd \grr\GRRLIB\GRRLIB
+  cd \grr\src
   make PLATFORM=cube clean all install
 ```
 

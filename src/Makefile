@@ -15,15 +15,15 @@ include $(DEVKITPPC)/gamecube_rules
 
 MACHDEP		+=	-DHW_DOL
 
-INSTALL_INC	:=	$(DEVKITPRO)/portlibs/gamecube/include
-INSTALL_LIB	:=	$(DEVKITPRO)/portlibs/gamecube/lib
+INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/gamecube/include
+INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/gamecube/lib
 else
 include $(DEVKITPPC)/wii_rules
 
 MACHDEP		+=	-DHW_RVL
 
-INSTALL_INC	:=	$(DEVKITPRO)/portlibs/wii/include
-INSTALL_LIB	:=	$(DEVKITPRO)/portlibs/wii/lib
+INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/wii/include
+INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/wii/lib
 endif
 
 NULLSTR :=

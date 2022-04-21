@@ -26,40 +26,98 @@ THE SOFTWARE.
  */
 
 #ifndef GX_BM_SUBTRACT
-    /**
-     * Blending type.
-     * libogc revision 4170 fixed a typographical error. GX_BM_SUBSTRACT was renamed GX_BM_SUBTRACT.
-     * But for previous versions this define is needed.
-     */
-    #define GX_BM_SUBTRACT      GX_BM_SUBSTRACT
+	/**
+	 * Blending type.
+	 * libogc revision 4170 fixed a typographical error. GX_BM_SUBSTRACT was renamed GX_BM_SUBTRACT.
+	 * But for previous versions this define is needed.
+	 */
+	#define GX_BM_SUBTRACT GX_BM_SUBSTRACT
 #endif
 
-extern  GRRLIB_drawSettings  GRRLIB_Settings;
+extern GRRLIB_drawSettings GRRLIB_Settings;
+
+/**
+ * Set drawing color.
+ * @param color The drawing color to set.
+ */
+INLINE
+void GRRLIB_SetColor(u32 color) {
+	GRRLIB_Settings.color = color;
+}
+
+/**
+ * Get drawing color.
+ * @return The current drawing color.
+ */
+INLINE
+u32 GRRLIB_GetColor() {
+	return GRRLIB_Settings.color;
+}
+
+/**
+ * Set point size.
+ * @param pointSize The point size to set.
+ */
+INLINE
+void GRRLIB_SetPointSize(u8 pointSize) {
+	GRRLIB_Settings.pointSize = pointSize;
+
+	GX_SetPointSize(pointSize, GX_TO_ZERO);
+}
+
+/**
+ * Get point size.
+ * @return The current point size.
+ */
+INLINE
+u32 GRRLIB_GetPointSize() {
+	return GRRLIB_Settings.pointSize;
+}
+
+/**
+ * Set line width.
+ * @param lineWidth The line width to set.
+ */
+INLINE
+void GRRLIB_SetLineWidth(u8 lineWidth) {
+	GRRLIB_Settings.lineWidth = lineWidth;
+
+	GX_SetLineWidth(lineWidth, GX_TO_ZERO);
+}
+
+/**
+ * Get line width.
+ * @return The current line width.
+ */
+INLINE
+u32 GRRLIB_GetLineWidth() {
+	return GRRLIB_Settings.lineWidth;
+}
 
 /**
  * Set a blending mode.
  * @param blendmode The blending mode to use (Default: GRRLIB_BLEND_ALPHA).
  */
 INLINE
-void  GRRLIB_SetBlend (const GRRLIB_blendMode blendmode) {
-    GRRLIB_Settings.blend = blendmode;
-    switch (GRRLIB_Settings.blend) {
-        case GRRLIB_BLEND_ALPHA:
-            GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-            break;
-        case GRRLIB_BLEND_ADD:
-            GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_DSTALPHA, GX_LO_CLEAR);
-            break;
-        case GRRLIB_BLEND_SCREEN:
-            GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCCLR, GX_BL_DSTALPHA, GX_LO_CLEAR);
-            break;
-        case GRRLIB_BLEND_MULTI:
-            GX_SetBlendMode(GX_BM_SUBTRACT, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-            break;
-        case GRRLIB_BLEND_INV:
-            GX_SetBlendMode(GX_BM_BLEND, GX_BL_INVSRCCLR, GX_BL_INVSRCCLR, GX_LO_CLEAR);
-            break;
-    }
+void GRRLIB_SetBlend(const GRRLIB_blendMode blendmode) {
+	GRRLIB_Settings.blend = blendmode;
+	switch(GRRLIB_Settings.blend) {
+		case GRRLIB_BLEND_ALPHA:
+			GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+			break;
+		case GRRLIB_BLEND_ADD:
+			GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_DSTALPHA, GX_LO_CLEAR);
+			break;
+		case GRRLIB_BLEND_SCREEN:
+			GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCCLR, GX_BL_DSTALPHA, GX_LO_CLEAR);
+			break;
+		case GRRLIB_BLEND_MULTI:
+			GX_SetBlendMode(GX_BM_SUBTRACT, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+			break;
+		case GRRLIB_BLEND_INV:
+			GX_SetBlendMode(GX_BM_BLEND, GX_BL_INVSRCCLR, GX_BL_INVSRCCLR, GX_LO_CLEAR);
+			break;
+	}
 }
 
 /**
@@ -67,8 +125,8 @@ void  GRRLIB_SetBlend (const GRRLIB_blendMode blendmode) {
  * @return The current blending mode.
  */
 INLINE
-GRRLIB_blendMode  GRRLIB_GetBlend (void) {
-    return GRRLIB_Settings.blend;
+GRRLIB_blendMode  GRRLIB_GetBlend(void) {
+	return GRRLIB_Settings.blend;
 }
 
 /**
@@ -76,8 +134,8 @@ GRRLIB_blendMode  GRRLIB_GetBlend (void) {
  * @param aa Set to true to enable anti-aliasing (Default: Enabled).
  */
 INLINE
-void  GRRLIB_SetAntiAliasing (const bool aa) {
-    GRRLIB_Settings.antialias = aa;
+void GRRLIB_SetAntiAliasing(const bool aa) {
+	GRRLIB_Settings.antialias = aa;
 }
 
 /**
@@ -85,7 +143,6 @@ void  GRRLIB_SetAntiAliasing (const bool aa) {
  * @return True if anti-aliasing is enabled.
  */
 INLINE
-bool  GRRLIB_GetAntiAliasing (void) {
-    return GRRLIB_Settings.antialias;
+bool GRRLIB_GetAntiAliasing(void) {
+	return GRRLIB_Settings.antialias;
 }
-

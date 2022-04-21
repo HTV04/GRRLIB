@@ -53,12 +53,12 @@ THE SOFTWARE.
 #endif /* __cplusplus */
 
 //==============================================================================
-// Primitive colour macros
+// Primitive color macros
 //==============================================================================
-#define R(c)  (((c) >>24) &0xFF)  /**< Extract red component of colour. */
-#define G(c)  (((c) >>16) &0xFF)  /**< Extract green component of colour. */
-#define B(c)  (((c) >> 8) &0xFF)  /**< Extract blue component of colour. */
-#define A(c)  ( (c)       &0xFF)  /**< Extract alpha component of colour. */
+#define GRRLIB_R(c) (((c) >> 24) & 0xFF) /**< Extract red component of color. */
+#define GRRLIB_G(c) (((c) >> 16) & 0xFF) /**< Extract green component of color. */
+#define GRRLIB_B(c) (((c) >>  8) & 0xFF) /**< Extract blue component of color. */
+#define GRRLIB_A(c) ( (c)        & 0xFF) /**< Extract alpha component of color. */
 
 /**
  * Build an RGB pixel from components.
@@ -67,10 +67,10 @@ THE SOFTWARE.
  * @param b Blue component.
  * @param a Alpha component.
  */
-#define RGBA(r,g,b,a) ( (u32)( ( ((u32)(r))        <<24) |  \
-                               ((((u32)(g)) &0xFF) <<16) |  \
-                               ((((u32)(b)) &0xFF) << 8) |  \
-                               ( ((u32)(a)) &0xFF      ) ) )
+#define GRRLIB_RGBA(r, g, b, a) ((u32)((((u32) (r))         << 24) | \
+                                      ((((u32) (g)) & 0xFF) << 16) | \
+                                      ((((u32) (b)) & 0xFF) <<  8) | \
+                                      ( ((u32) (a)) & 0xFF       ) ) )
 
 //==============================================================================
 // typedefs, enumerators & structs
@@ -79,25 +79,28 @@ THE SOFTWARE.
  * GRRLIB Blending Modes.
  */
 typedef  enum GRRLIB_blendMode {
-    GRRLIB_BLEND_ALPHA  = 0,    /**< Alpha Blending. */
-    GRRLIB_BLEND_ADD    = 1,    /**< Additive Blending. */
-    GRRLIB_BLEND_SCREEN = 2,    /**< Alpha Light Blending. */
-    GRRLIB_BLEND_MULTI  = 3,    /**< Multiply Blending. */
-    GRRLIB_BLEND_INV    = 4,    /**< Invert Color Blending. */
+	GRRLIB_BLEND_ALPHA  = 0, /**< Alpha Blending. */
+	GRRLIB_BLEND_ADD    = 1, /**< Additive Blending. */
+	GRRLIB_BLEND_SCREEN = 2, /**< Alpha Light Blending. */
+	GRRLIB_BLEND_MULTI  = 3, /**< Multiply Blending. */
+	GRRLIB_BLEND_INV    = 4, /**< Invert Color Blending. */
 } GRRLIB_blendMode;
 
-#define GRRLIB_BLEND_NONE   (GRRLIB_BLEND_ALPHA)    /**< Alias for GRRLIB_BLEND_ALPHA. */
-#define GRRLIB_BLEND_LIGHT  (GRRLIB_BLEND_ADD)      /**< Alias for GRRLIB_BLEND_ADD. */
-#define GRRLIB_BLEND_SHADE  (GRRLIB_BLEND_MULTI)    /**< Alias for GRRLIB_BLEND_MULTI. */
+#define GRRLIB_BLEND_NONE  (GRRLIB_BLEND_ALPHA) /**< Alias for GRRLIB_BLEND_ALPHA. */
+#define GRRLIB_BLEND_LIGHT (GRRLIB_BLEND_ADD)   /**< Alias for GRRLIB_BLEND_ADD. */
+#define GRRLIB_BLEND_SHADE (GRRLIB_BLEND_MULTI) /**< Alias for GRRLIB_BLEND_MULTI. */
 
 //------------------------------------------------------------------------------
 /**
  * Structure to hold the current drawing settings.
  */
 typedef  struct GRRLIB_drawSettings {
-    bool              antialias;    /**< AntiAlias is enabled when set to true. */
-    GRRLIB_blendMode  blend;        /**< Blending Mode.                         */
-    int               lights;       /**< Active lights.                         */
+	u32               color;     /**< Drawing color. */
+	u8                pointSize; /**< Point size. */
+	u8                lineWidth; /**< Line width. */
+	bool              antialias; /**< Anti-alias is enabled when set to true. */
+	GRRLIB_blendMode  blend;     /**< Blending Mode.                         */
+	int               lights;    /**< Active lights.                         */
 } GRRLIB_drawSettings;
 
 //------------------------------------------------------------------------------
@@ -105,19 +108,19 @@ typedef  struct GRRLIB_drawSettings {
  * Structure to hold the texture information.
  */
 typedef  struct GRRLIB_texImg {
-    u32    w;           /**< The width of the texture in pixels.  */
-    u32    h;           /**< The height of the texture in pixels. */
+	u32    w;            /**< The width of the texture in pixels.  */
+	u32    h;            /**< The height of the texture in pixels. */
 
-    bool   tiledtex;    /**< Texture is tiled if set to true.   */
-    u32    tilew;       /**< The width of one tile in pixels.   */
-    u32    tileh;       /**< The height of one tile in pixels.  */
-    u32    nbtilew;     /**< Number of tiles for the x axis.    */
-    u32    nbtileh;     /**< Number of tiles for the y axis.    */
-    u32    tilestart;   /**< Offset to tile starting position.  */
-    f32    ofnormaltexx;/**< Offset of normalized texture on x. */
-    f32    ofnormaltexy;/**< Offset of normalized texture on y. */
+	bool   tiledtex;     /**< Texture is tiled if set to true.   */
+	u32    tilew;        /**< The width of one tile in pixels.   */
+	u32    tileh;        /**< The height of one tile in pixels.  */
+	u32    nbtilew;      /**< Number of tiles for the x axis.    */
+	u32    nbtileh;      /**< Number of tiles for the y axis.    */
+	u32    tilestart;    /**< Offset to tile starting position.  */
+	f32    ofnormaltexx; /**< Offset of normalized texture on x. */
+	f32    ofnormaltexy; /**< Offset of normalized texture on y. */
 
-    void  *data;        /**< Pointer to the texture data. */
+	void  *data;         /**< Pointer to the texture data. */
 } GRRLIB_texImg;
 
 //------------------------------------------------------------------------------
@@ -125,12 +128,12 @@ typedef  struct GRRLIB_texImg {
  * Structure to hold the bytemap character information.
  */
 typedef  struct GRRLIB_bytemapChar {
-    u8  width;          /**< Character width.    */
-    u8  height;         /**< Character height.   */
-    s8  relx;           /**< Horizontal offset relative to cursor (-128 to 127).            */
-    s8  rely;           /**< Vertical offset relative to cursor (-128 to 127).              */
-    u8  kerning;        /**< Kerning (Horizontal cursor shift after drawing the character). */
-    u8  *data;          /**< Character data (uncompressed, 8 bits per pixel).               */
+	u8  width;          /**< Character width.    */
+	u8  height;         /**< Character height.   */
+	s8  relx;           /**< Horizontal offset relative to cursor (-128 to 127).            */
+	s8  rely;           /**< Vertical offset relative to cursor (-128 to 127).              */
+	u8  kerning;        /**< Kerning (Horizontal cursor shift after drawing the character). */
+	u8  *data;          /**< Character data (uncompressed, 8 bits per pixel).               */
 } GRRLIB_bytemapChar;
 
 //------------------------------------------------------------------------------
@@ -138,13 +141,13 @@ typedef  struct GRRLIB_bytemapChar {
  * Structure to hold the bytemap font information.
  */
 typedef  struct GRRLIB_bytemapFont {
-    char  *name;                /**< Font name.                      */
-    u32   *palette;             /**< Font palette.                   */
-    u16   nbChar;               /**< Number of characters in font.   */
-    u8    version;              /**< Version.                        */
-    s8    tracking;             /**< Tracking (Add-space after each char) (-128 to 127). */
+	char  *name;                /**< Font name.                      */
+	u32   *palette;             /**< Font palette.                   */
+	u16   nbChar;               /**< Number of characters in font.   */
+	u8    version;              /**< Version.                        */
+	s8    tracking;             /**< Tracking (Add-space after each char) (-128 to 127). */
 
-    GRRLIB_bytemapChar charDef[256];   /**< Array of bitmap characters. */
+	GRRLIB_bytemapChar charDef[256];   /**< Array of bitmap characters. */
 } GRRLIB_bytemapFont;
 
 //------------------------------------------------------------------------------
@@ -152,8 +155,8 @@ typedef  struct GRRLIB_bytemapFont {
  * Structure to hold the TTF information.
  */
 typedef  struct GRRLIB_Font {
-    void *face;     /**< A TTF face object. */
-    bool kerning;   /**< true whenever a face object contains kerning data that can be accessed with FT_Get_Kerning. */
+	void *face;     /**< A TTF face object. */
+	bool kerning;   /**< true whenever a face object contains kerning data that can be accessed with FT_Get_Kerning. */
 } GRRLIB_ttfFont;
 
 //------------------------------------------------------------------------------
@@ -161,7 +164,7 @@ typedef  struct GRRLIB_Font {
  * Structure to hold the matrix information.
  */
 typedef  struct GRRLIB_matrix {
-    Mtx matrix;
+	Mtx matrix;
 } GRRLIB_matrix;
 
 //==============================================================================

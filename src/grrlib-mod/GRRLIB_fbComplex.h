@@ -33,7 +33,7 @@ THE SOFTWARE.
  */
 INLINE
 void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_POINTS);
+	GRRLIB_GXEngine(v, color, n, GX_POINTS);
 }
 
 /**
@@ -44,7 +44,7 @@ void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
  */
 INLINE
 void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
+	GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
 }
 
 /**
@@ -55,5 +55,5 @@ void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
  */
 INLINE
 void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[], const long n) {
-    GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
+	GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
 }

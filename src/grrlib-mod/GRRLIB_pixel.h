@@ -26,9 +26,9 @@ THE SOFTWARE.
  */
 
 #define _SHIFTL(v, s, w)    \
-    ((u32) (((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+	((u32) (((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
 #define _SHIFTR(v, s, w)    \
-    ((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
+	((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
 
 /**
  * Return the color value of a pixel from a GRRLIB_texImg.
@@ -39,15 +39,15 @@ THE SOFTWARE.
  */
 INLINE
 u32  GRRLIB_GetPixelFromtexImg (const int x, const int y,
-                                const GRRLIB_texImg *tex) {
-    u32  offs;
-    u32  ar;
-    u8*  bp = (u8*)tex->data;
+								const GRRLIB_texImg *tex) {
+	u32  offs;
+	u32  ar;
+	u8*  bp = (u8*)tex->data;
 
-    offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+	offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
 
-    ar =                 (u32)(*((u16*)(bp+offs   )));
-    return (ar<<24) | ( ((u32)(*((u16*)(bp+offs+32)))) <<8) | (ar>>8);  // Wii is big-endian
+	ar =                 (u32)(*((u16*)(bp+offs   )));
+	return (ar<<24) | ( ((u32)(*((u16*)(bp+offs+32)))) <<8) | (ar>>8);  // Wii is big-endian
 }
 
 /**
@@ -60,14 +60,14 @@ u32  GRRLIB_GetPixelFromtexImg (const int x, const int y,
  */
 INLINE
 void  GRRLIB_SetPixelTotexImg (const int x, const int y,
-                               GRRLIB_texImg *tex, const u32 color) {
-    u32  offs;
-    u8*  bp = (u8*)tex->data;
+							   GRRLIB_texImg *tex, const u32 color) {
+	u32  offs;
+	u8*  bp = (u8*)tex->data;
 
-    offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+	offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
 
-    *((u16*)(bp+offs   )) = (u16)((color <<8) | (color >>24));
-    *((u16*)(bp+offs+32)) = (u16) (color >>8);
+	*((u16*)(bp+offs   )) = (u16)((color <<8) | (color >>24));
+	*((u16*)(bp+offs+32)) = (u16) (color >>8);
 }
 
 /**
@@ -78,13 +78,13 @@ void  GRRLIB_SetPixelTotexImg (const int x, const int y,
  */
 INLINE
 u32 GRRLIB_GetPixelFromFB (int x, int y) {
-    u32 regval,val;
+	u32 regval,val;
 
-    regval = 0xc8000000|(_SHIFTL(x,2,10));
-    regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
-    val = *(u32*)regval;
+	regval = 0xc8000000|(_SHIFTL(x,2,10));
+	regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
+	val = *(u32*)regval;
 
-    return RGBA(_SHIFTR(val,16,8), _SHIFTR(val,8,8), val&0xff, _SHIFTR(val,24,8));
+	return GRRLIB_RGBA(_SHIFTR(val,16,8), _SHIFTR(val,8,8), val&0xff, _SHIFTR(val,24,8));
 }
 
 /**
@@ -95,9 +95,9 @@ u32 GRRLIB_GetPixelFromFB (int x, int y) {
  */
 INLINE
 void GRRLIB_SetPixelToFB (int x, int y, u32 pokeColor) {
-    u32 regval;
+	u32 regval;
 
-    regval = 0xc8000000|(_SHIFTL(x,2,10));
-    regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
-    *(u32*)regval = _SHIFTL(A(pokeColor),24,8) | _SHIFTL(R(pokeColor),16,8) | _SHIFTL(G(pokeColor),8,8) | (B(pokeColor)&0xff);
+	regval = 0xc8000000|(_SHIFTL(x,2,10));
+	regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
+	*(u32*)regval = _SHIFTL(GRRLIB_A(pokeColor),24,8) | _SHIFTL(GRRLIB_R(pokeColor),16,8) | _SHIFTL(GRRLIB_G(pokeColor),8,8) | (GRRLIB_B(pokeColor)&0xff);
 }

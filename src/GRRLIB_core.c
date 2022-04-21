@@ -52,170 +52,173 @@ static bool  is_setup = false;  // To control entry and exit
  * @see GRRLIB_Exit
  */
 int  GRRLIB_Init (void) {
-    f32 yscale;
-    u32 xfbHeight;
-    Mtx44 perspective;
-    s8 error_code = 0;
+	f32 yscale;
+	u32 xfbHeight;
+	Mtx44 perspective;
+	s8 error_code = 0;
 
-    // Ensure this function is only ever called once
-    if (is_setup == true) {
-        return 0;
-    }
+	// Ensure this function is only ever called once
+	if (is_setup == true) {
+		return 0;
+	}
 
-    // Initialise the video subsystem
-    VIDEO_Init();
-    VIDEO_SetBlack(true);  // Disable video output during initialisation
+	// Initialise the video subsystem
+	VIDEO_Init();
+	VIDEO_SetBlack(true);  // Disable video output during initialisation
 
-    // Grab a pointer to the video mode attributes
-    rmode = VIDEO_GetPreferredMode(NULL);
-    if (rmode == NULL) {
-        return -1;
-    }
+	// Grab a pointer to the video mode attributes
+	rmode = VIDEO_GetPreferredMode(NULL);
+	if (rmode == NULL) {
+		return -1;
+	}
 
-    // Video Mode Correction
-    switch (rmode->viTVMode) {
-        case VI_DEBUG_PAL:  // PAL 50hz 576i
-            //rmode = &TVPal574IntDfScale;
-            rmode = &TVPal528IntDf; // BC ...this is still wrong, but "less bad" for now
-            break;
-        default:
+	// Video Mode Correction
+	switch (rmode->viTVMode) {
+		case VI_DEBUG_PAL:  // PAL 50hz 576i
+			//rmode = &TVPal574IntDfScale;
+			rmode = &TVPal528IntDf; // BC ...this is still wrong, but "less bad" for now
+			break;
+		default:
 #ifdef HW_DOL
-            if(VIDEO_HaveComponentCable()) {
-                rmode = &TVNtsc480Prog;
-            }
+			if(VIDEO_HaveComponentCable()) {
+				rmode = &TVNtsc480Prog;
+			}
 #endif
-            break;
-    }
+			break;
+	}
 
 #if defined(HW_RVL)
-    // 16:9 and 4:3 Screen Adjustment for Wii
-    if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
-        rmode->viWidth = 678;
-    } else {    // 4:3
-        rmode->viWidth = 672;
-    }
-    // This probably needs to consider PAL
-    rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - rmode->viWidth) / 2;
+	// 16:9 and 4:3 Screen Adjustment for Wii
+	if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
+		rmode->viWidth = 678;
+	} else {    // 4:3
+		rmode->viWidth = 672;
+	}
+	// This probably needs to consider PAL
+	rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - rmode->viWidth) / 2;
 #endif
 
 #if defined(HW_RVL)
-     // Patch widescreen on Wii U
-    if (CONF_GetAspectRatio() == CONF_ASPECT_16_9 && (*(u32*)(0xCD8005A0) >> 16) == 0xCAFE)
-    {
-        write32(0xd8006a0, 0x30000004);
-        mask32(0xd8006a8, 0, 2);
-    }
+	 // Patch widescreen on Wii U
+	if (CONF_GetAspectRatio() == CONF_ASPECT_16_9 && (*(u32*)(0xCD8005A0) >> 16) == 0xCAFE)
+	{
+		write32(0xd8006a0, 0x30000004);
+		mask32(0xd8006a8, 0, 2);
+	}
 #endif
 
-    // --
-    VIDEO_Configure(rmode);
+	// --
+	VIDEO_Configure(rmode);
 
-    // Get some memory to use for a "double buffered" frame buffer
-    if ( !(xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
-        return -1;
-    }
-    if ( !(xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
-        return -1;
-    }
+	// Get some memory to use for a "double buffered" frame buffer
+	if ( !(xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+		return -1;
+	}
+	if ( !(xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+		return -1;
+	}
 
-    VIDEO_SetNextFramebuffer(xfb[fb]);  // Choose a frame buffer to start with
+	VIDEO_SetNextFramebuffer(xfb[fb]);  // Choose a frame buffer to start with
 
-    VIDEO_Flush();                      // flush the frame to the TV
-    VIDEO_WaitVSync();                  // Wait for the TV to finish updating
-    // If the TV image is interlaced it takes two passes to display the image
-    if (rmode->viTVMode & VI_NON_INTERLACE) {
-        VIDEO_WaitVSync();
-    }
+	VIDEO_Flush();                      // flush the frame to the TV
+	VIDEO_WaitVSync();                  // Wait for the TV to finish updating
+	// If the TV image is interlaced it takes two passes to display the image
+	if (rmode->viTVMode & VI_NON_INTERLACE) {
+		VIDEO_WaitVSync();
+	}
 
-    // The FIFO is the buffer the CPU uses to send commands to the GPU
-    if ( !(gp_fifo = memalign(32, DEFAULT_FIFO_SIZE)) ) {
-        return -1;
-    }
-    memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
-    GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
+	// The FIFO is the buffer the CPU uses to send commands to the GPU
+	if ( !(gp_fifo = memalign(32, DEFAULT_FIFO_SIZE)) ) {
+		return -1;
+	}
+	memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
+	GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
-    // Clear the background to opaque black and clears the z-buffer
-    GX_SetCopyClear((GXColor){ 0, 0, 0, 0 }, GX_MAX_Z24);
+	// Clear the background to opaque black and clears the z-buffer
+	GX_SetCopyClear((GXColor){ 0, 0, 0, 0 }, GX_MAX_Z24);
 
-    if (rmode->aa) {
-        GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);  // Set 16 bit RGB565
-    }
-    else {
-        GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR);  // Set 24 bit Z24
-    }
+	if (rmode->aa) {
+		GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);  // Set 16 bit RGB565
+	}
+	else {
+		GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR);  // Set 24 bit Z24
+	}
 
-    // Other GX setup
-    yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
-    xfbHeight = GX_SetDispCopyYScale(yscale);
-    GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
-    GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
-    GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
-    GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
+	// Other GX setup
+	yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
+	xfbHeight = GX_SetDispCopyYScale(yscale);
+	GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
+	GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
+	GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+	GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
-    GX_SetDispCopyGamma(GX_GM_1_0);
+	GX_SetDispCopyGamma(GX_GM_1_0);
 
-    if (rmode->fbWidth <= 0) { printf("GRRLIB " GRRLIB_VER_STRING); }
+	if (rmode->fbWidth <= 0) { printf("GRRLIB " GRRLIB_VER_STRING); }
 
-    // Setup the vertex descriptor
-    GX_ClearVtxDesc();      // clear all the vertex descriptors
-    GX_InvVtxCache();       // Invalidate the vertex cache
-    GX_InvalidateTexAll();  // Invalidate all textures
+	// Setup the vertex descriptor
+	GX_ClearVtxDesc();      // clear all the vertex descriptors
+	GX_InvVtxCache();       // Invalidate the vertex cache
+	GX_InvalidateTexAll();  // Invalidate all textures
 
-    // Tells the flipper to expect direct data
-    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
-    GX_SetVtxDesc(GX_VA_POS,  GX_DIRECT);
-    GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+	// Tells the flipper to expect direct data
+	GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
+	GX_SetVtxDesc(GX_VA_POS,  GX_DIRECT);
+	GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
 
-    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS,  GX_POS_XYZ,  GX_F32, 0);
-    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST,   GX_F32, 0);
-    // Colour 0 is 8bit RGBA format
-    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GX_SetZMode(GX_FALSE, GX_LEQUAL, GX_TRUE);
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS,  GX_POS_XYZ,  GX_F32, 0);
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST,   GX_F32, 0);
+	// Colour 0 is 8bit RGBA format
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+	GX_SetZMode(GX_FALSE, GX_LEQUAL, GX_TRUE);
 
-    GX_SetNumChans(1);    // colour is the same as vertex colour
-    GX_SetNumTexGens(1);  // One texture exists
-    GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
-    GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+	GX_SetNumChans(1);    // colour is the same as vertex colour
+	GX_SetNumTexGens(1);  // One texture exists
+	GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+	GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+	GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
-    // Default matrix settings, reflected in GRRLIB_Origin()
-    guMtxIdentity(GXmodelView2D);
-    guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0, 0.0, -100.0);
+	// Default matrix settings, reflected in GRRLIB_Origin()
+	guMtxIdentity(GXmodelView2D);
+	guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0, 0.0, -100.0);
 
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
-    guOrtho(perspective, 0.0f, rmode->efbHeight, 0.0f, rmode->fbWidth, 0.0f, 1000.0f);
-    GX_LoadProjectionMtx(perspective, GX_ORTHOGRAPHIC);
+	guOrtho(perspective, 0.0f, rmode->efbHeight, 0.0f, rmode->fbWidth, 0.0f, 1000.0f);
+	GX_LoadProjectionMtx(perspective, GX_ORTHOGRAPHIC);
 
-    GX_SetViewport(0.0f, 0.0f, rmode->fbWidth, rmode->efbHeight, 0.0f, 1.0f);
-    GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GX_SetAlphaUpdate(GX_TRUE);
-    GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GX_SetColorUpdate(GX_ENABLE);
-    GX_SetCullMode(GX_CULL_NONE);
-    GRRLIB_ClipReset();
+	GX_SetViewport(0.0f, 0.0f, rmode->fbWidth, rmode->efbHeight, 0.0f, 1.0f);
+	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+	GX_SetAlphaUpdate(GX_TRUE);
+	GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
+	GX_SetColorUpdate(GX_ENABLE);
+	GX_SetCullMode(GX_CULL_NONE);
+	GRRLIB_ClipReset();
 
-    // Default settings
-    GRRLIB_Settings.antialias = true;
-    GRRLIB_Settings.blend     = GRRLIB_BLEND_ALPHA;
-    GRRLIB_Settings.lights    = 0;
+	// Default settings
+	GRRLIB_Settings.color     = 0xFFFFFFFF;
+	GRRLIB_Settings.pointSize = 1;
+	GRRLIB_Settings.lineWidth = 1;
+	GRRLIB_Settings.antialias = true;
+	GRRLIB_Settings.blend     = GRRLIB_BLEND_ALPHA;
+	GRRLIB_Settings.lights    = 0;
 
-    // Schedule cleanup for when program exits
-    is_setup = true;
-    atexit(GRRLIB_Exit);
+	// Schedule cleanup for when program exits
+	is_setup = true;
+	atexit(GRRLIB_Exit);
 
-    // Initialise the filing system
-    if (fatInitDefault() == false) {
-        error_code = -2;
-    }
+	// Initialise the filing system
+	if (fatInitDefault() == false) {
+		error_code = -2;
+	}
 
-    // Initialise TTF
-    if (GRRLIB_InitTTF() != 0) {
-        error_code = -3;
-    }
+	// Initialise TTF
+	if (GRRLIB_InitTTF() != 0) {
+		error_code = -3;
+	}
 
-    VIDEO_SetBlack(false);  // Enable video output
-    return error_code;
+	VIDEO_SetBlack(false);  // Enable video output
+	return error_code;
 }
 
 /**
@@ -224,41 +227,41 @@ int  GRRLIB_Init (void) {
  * and only if the setup function has been called.
  */
 void  GRRLIB_Exit (void) {
-    static  bool  done = false;
-    if (done == true || is_setup == false) {
-        return;
-    }
-    else {
-        done = true;
-    }
+	static  bool  done = false;
+	if (done == true || is_setup == false) {
+		return;
+	}
+	else {
+		done = true;
+	}
 
-    // Allow write access to the full screen
-    GX_SetClipMode( GX_CLIP_DISABLE );
-    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+	// Allow write access to the full screen
+	GX_SetClipMode( GX_CLIP_DISABLE );
+	GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
 
-    // We empty both frame buffers on our way out
-    // otherwise dead frames are sometimes seen when starting the next app
-    GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
-    GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
+	// We empty both frame buffers on our way out
+	// otherwise dead frames are sometimes seen when starting the next app
+	GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
+	GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
 
-    // Shut down the GX engine
-    GX_DrawDone();
-    GX_AbortFrame();
+	// Shut down the GX engine
+	GX_DrawDone();
+	GX_AbortFrame();
 
-    // Free up memory allocated for frame buffers & FIFOs
-    if (xfb[0] != NULL) {
-        free(MEM_K1_TO_K0(xfb[0]));
-        xfb[0] = NULL;
-    }
-    if (xfb[1] != NULL) {
-        free(MEM_K1_TO_K0(xfb[1]));
-        xfb[1] = NULL;
-    }
-    if (gp_fifo != NULL) {
-        free(gp_fifo);
-        gp_fifo = NULL;
-    }
+	// Free up memory allocated for frame buffers & FIFOs
+	if (xfb[0] != NULL) {
+		free(MEM_K1_TO_K0(xfb[0]));
+		xfb[0] = NULL;
+	}
+	if (xfb[1] != NULL) {
+		free(MEM_K1_TO_K0(xfb[1]));
+		xfb[1] = NULL;
+	}
+	if (gp_fifo != NULL) {
+		free(gp_fifo);
+		gp_fifo = NULL;
+	}
 
-    // Done with TTF
-    GRRLIB_ExitTTF();
+	// Done with TTF
+	GRRLIB_ExitTTF();
 }

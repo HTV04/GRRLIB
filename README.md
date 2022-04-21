@@ -18,7 +18,7 @@
 ## Introduction
 GRRLIB-mod is a C/C++ 2D/3D graphics library based on [GRRLIB](https://github.com/GRRLIB/GRRLIB) for Wii/GameCube application developers. It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
 
-GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrrlib-mod". Because GRRLIB processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
+GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrrlib-mod". Because GRRLIB-mod processes JPEG and PNG images, it requires the installation of the 'libjpeg' and 'libpngu' libraries. 'libpngu', in turn, requires 'libpng'. GRRLIB-mod has FileIO functions to allow real-time loading and saving of graphical data, and thus requires 'libfat'. GRRLIB-mod also has the possibility to use TrueType fonts, so 'libfreetype' is also required.
 
 ```
 libgrrlib-mod      <- 2D/3D graphics library
@@ -43,7 +43,7 @@ This document will presume that you have clone this repository to a directory ca
 This guide is for Windows. If you are using macOS, Linux, or another compatible operating system, you will need to convert these instructions.
 
 ```text
-GRRLIB      is supplied as source code
+GRRLIB-mod  is supplied as source code
 libpngu     is available from the original GRRLIB repo
 libpng      is supplied via devkitPro pacman (ppc-libpng)
 libfreetype is supplied via devkitPro pacman (ppc-freetype)
@@ -53,7 +53,7 @@ libfat      is supplied via devkitPro pacman (libfat-ogc)
 
 libpngu can be compiled and installed using the [instructions from the original GRRLIB repo](https://github.com/GRRLIB/GRRLIB#installing-grrlib).
 
-The easy way is to install GRRLIB and all the required libraries in a single command:
+The easy way is to install GRRLIB-mod and all the required libraries in a single command:
 ```bash
   c:
   cd \grr\src

@@ -83,8 +83,14 @@ void  GRRLIB_Exit (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbAdvanced.c - Render to framebuffer: Advanced primitives
-void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
-                     const u32 color, const u8 filled);
+void  GRRLIB_Plot       (const f32 x,      const f32 y);
+void  GRRLIB_Line       (const f32 x1,     const f32 y1,
+                         const f32 x2,     const f32 y2);
+void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
+                         const f32 width,  const f32 height,
+                         const bool filled);
+void  GRRLIB_Circle     (const f32 x,      const f32 y,
+                         const f32 radius, const u8 filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fileIO - File I/O (SD Card)
@@ -96,8 +102,8 @@ bool             GRRLIB_ScrShot             (const char* filename);
 //------------------------------------------------------------------------------
 // GRRLIB_print.c - Will someone please tell me what these are :)
 void  GRRLIB_Printf   (const f32 xpos, const f32 ypos,
-                       const GRRLIB_texImg *tex, const u32 color,
-                       const f32 zoom, const char *text, ...);
+                       const GRRLIB_texImg *tex, const f32 zoom,
+                       const char *text, ...);
 
 void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
                        const GRRLIB_bytemapFont *bmf,
@@ -107,22 +113,20 @@ void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
 // GRRLIB_render.c - Rendering functions
 void  GRRLIB_DrawImg  (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const f32 offsetX, const f32 offsetY, const u32 color);
+                       const f32 offsetX, const f32 offsetY);
 
-void  GRRLIB_DrawImgQuad  (const guVector pos[4], GRRLIB_texImg *tex,
-                           const u32 color);
+void  GRRLIB_DrawImgQuad  (const guVector pos[4], GRRLIB_texImg *tex);
 
 void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const f32 offsetX, const f32 offsetY, const u32 color,
-                       const int frame);
+                       const f32 offsetX, const f32 offsetY, const int frame);
 
 void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
                        const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const f32 offsetX, const f32 offsetY, const u32 color);
+                       const f32 offsetX, const f32 offsetY);
 
-void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color, const int frame);
+void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const int frame);
 
 void  GRRLIB_Render  (void);
 
@@ -187,8 +191,8 @@ void GRRLIB_SetLightOff(void);
 // GRRLIB_ttf.c - FreeType function for GRRLIB
 GRRLIB_ttfFont* GRRLIB_LoadTTF(const u8* file_base, s32 file_size);
 void GRRLIB_FreeTTF(GRRLIB_ttfFont *myFont);
-void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize, const u32 color);
-void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *string, unsigned int fontSize, const u32 color);
+void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize);
+void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *string, unsigned int fontSize);
 u32 GRRLIB_WidthTTF(GRRLIB_ttfFont *myFont, const char *, unsigned int);
 u32 GRRLIB_WidthTTFW(GRRLIB_ttfFont *myFont, const wchar_t *, unsigned int);
 

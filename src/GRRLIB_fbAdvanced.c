@@ -24,36 +24,114 @@ THE SOFTWARE.
 
 #include <grrlib-mod.h>
 
+extern GRRLIB_drawSettings GRRLIB_Settings;
+
+/**
+ * Draw a dot.
+ * @param x Specifies the x-coordinate of the dot.
+ * @param y Specifies the y-coordinate of the dot.
+ * @author Jespa
+ */
+void  GRRLIB_Plot (const f32 x, const f32 y) {
+	GX_Begin(GX_POINTS, GX_VTXFMT0, 1);
+		GX_Position3f32(x, y, 0.0f);
+		GX_Color1u32(GRRLIB_Settings.color);
+	GX_End();
+}
+
+/**
+ * Draw a line.
+ * @param x1 Starting point for line for the x coordinate.
+ * @param y1 Starting point for line for the y coordinate.
+ * @param x2 Ending point for line for the x coordinate.
+ * @param y2 Ending point for line for the x coordinate.
+ * @author JESPA
+ */
+void  GRRLIB_Line (const f32 x1, const f32 y1,
+				   const f32 x2, const f32 y2) {
+	u32 color = GRRLIB_Settings.color;
+
+	GX_Begin(GX_LINES, GX_VTXFMT0, 2);
+		GX_Position3f32(x1, y1, 0.0f);
+		GX_Color1u32(color);
+		GX_Position3f32(x2, y2, 0.0f);
+		GX_Color1u32(color);
+	GX_End();
+}
+
+/**
+ * Draw a rectangle.
+ * @param x Specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param y Specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param width The width of the rectangle.
+ * @param height The height of the rectangle.
+ * @param filled Set to true to fill the rectangle.
+ */
+void  GRRLIB_Rectangle (const f32 x,      const f32 y,
+						const f32 width,  const f32 height,
+						const bool filled) {
+	f32 x2 = x + width;
+	f32 y2 = y + height;
+	u32 color = GRRLIB_Settings.color;
+
+	if (filled == true) {
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+			GX_Position3f32(x, y, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x2, y, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x2, y2, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x, y2, 0.0f);
+			GX_Color1u32(color);
+		GX_End();
+	}
+	else {
+		GX_Begin(GX_LINESTRIP, GX_VTXFMT0, 5);
+			GX_Position3f32(x, y, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x2, y, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x2, y2, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x, y2, 0.0f);
+			GX_Color1u32(color);
+			GX_Position3f32(x, y, 0.0f);
+			GX_Color1u32(color);
+		GX_End();
+	}
+}
+
 /**
  * Draw a circle.
  * @author Dark_Link
  * @param x Specifies the x-coordinate of the circle.
  * @param y Specifies the y-coordinate of the circle.
  * @param radius The radius of the circle.
- * @param color The color of the circle in RGBA format.
  * @param filled Set to true to fill the circle.
  */
 void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
-                     const u32 color, const u8 filled) {
-    guVector v[36];
-    u32 ncolor[36];
-    u32 a;
-    f32 ra;
-    f32 G_DTOR = M_DTOR * 10;
+					 const u8 filled) {
+	guVector v[36];
+	u32 ncolor[36];
+	u32 a;
+	f32 ra;
+	f32 G_DTOR = M_DTOR * 10;
+	u32 color = GRRLIB_Settings.color;
 
-    for (a = 0; a < 36; a++) {
-        ra = a * G_DTOR;
+	for (a = 0; a < 36; a++) {
+		ra = a * G_DTOR;
 
-        v[a].x = cos(ra) * radius + x;
-        v[a].y = sin(ra) * radius + y;
-        v[a].z = 0.0f;
-        ncolor[a] = color;
-    }
+		v[a].x = cos(ra) * radius + x;
+		v[a].y = sin(ra) * radius + y;
+		v[a].z = 0.0f;
+		ncolor[a] = color;
+	}
 
-    if (filled == false) {
-        GRRLIB_GXEngine(v, ncolor, 36, GX_LINESTRIP  );
-    }
-    else {
-        GRRLIB_GXEngine(v, ncolor, 36, GX_TRIANGLEFAN);
-    }
+	if (filled == false) {
+		GRRLIB_GXEngine(v, ncolor, 36, GX_LINESTRIP);
+	}
+	else {
+		GRRLIB_GXEngine(v, ncolor, 36, GX_TRIANGLEFAN);
+	}
 }

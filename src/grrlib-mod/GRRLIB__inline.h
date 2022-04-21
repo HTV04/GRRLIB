@@ -80,12 +80,6 @@ INLINE  void  GRRLIB_GXEngine (const guVector v[], const u32 color[],
 //------------------------------------------------------------------------------
 // GRRLIB_fbSimple.h -
 INLINE  void  GRRLIB_FillScreen (const u32 color);
-INLINE  void  GRRLIB_Plot       (const f32 x,  const f32 y, const u32 color);
-INLINE  void  GRRLIB_Line       (const f32 x1, const f32 y1,
-                                 const f32 x2, const f32 y2, const u32 color);
-INLINE  void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
-                                 const f32 width,  const f32 height,
-                                 const u32 color, const bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation

@@ -34,14 +34,12 @@ THE SOFTWARE.
 	#define GX_BM_SUBTRACT GX_BM_SUBSTRACT
 #endif
 
-extern GRRLIB_drawSettings GRRLIB_Settings;
-
 /**
  * Set drawing color.
  * @param color The drawing color to set.
  */
 INLINE
-void GRRLIB_SetColor(u32 color) {
+void GRRLIB_SetColor(const u32 color) {
 	GRRLIB_Settings.color = color;
 }
 
@@ -50,7 +48,7 @@ void GRRLIB_SetColor(u32 color) {
  * @return The current drawing color.
  */
 INLINE
-u32 GRRLIB_GetColor() {
+u32 GRRLIB_GetColor(void) {
 	return GRRLIB_Settings.color;
 }
 
@@ -59,7 +57,7 @@ u32 GRRLIB_GetColor() {
  * @param pointSize The point size to set.
  */
 INLINE
-void GRRLIB_SetPointSize(u8 pointSize) {
+void GRRLIB_SetPointSize(const u8 pointSize) {
 	GRRLIB_Settings.pointSize = pointSize;
 
 	GX_SetPointSize(pointSize, GX_TO_ZERO);
@@ -70,7 +68,7 @@ void GRRLIB_SetPointSize(u8 pointSize) {
  * @return The current point size.
  */
 INLINE
-u32 GRRLIB_GetPointSize() {
+u8 GRRLIB_GetPointSize(void) {
 	return GRRLIB_Settings.pointSize;
 }
 
@@ -79,7 +77,7 @@ u32 GRRLIB_GetPointSize() {
  * @param lineWidth The line width to set.
  */
 INLINE
-void GRRLIB_SetLineWidth(u8 lineWidth) {
+void GRRLIB_SetLineWidth(const u8 lineWidth) {
 	GRRLIB_Settings.lineWidth = lineWidth;
 
 	GX_SetLineWidth(lineWidth, GX_TO_ZERO);
@@ -90,7 +88,7 @@ void GRRLIB_SetLineWidth(u8 lineWidth) {
  * @return The current line width.
  */
 INLINE
-u32 GRRLIB_GetLineWidth() {
+u8 GRRLIB_GetLineWidth(void) {
 	return GRRLIB_Settings.lineWidth;
 }
 
@@ -135,6 +133,8 @@ GRRLIB_blendMode  GRRLIB_GetBlend(void) {
  */
 INLINE
 void GRRLIB_SetAntiAliasing(const bool aa) {
+	GX_SetCopyFilter(aa ? rmode->aa : GX_FALSE, rmode->sample_pattern, GRRLIB_Settings.deflicker ? GX_TRUE : GX_FALSE, rmode->vfilter);
+
 	GRRLIB_Settings.antialias = aa;
 }
 
@@ -145,4 +145,24 @@ void GRRLIB_SetAntiAliasing(const bool aa) {
 INLINE
 bool GRRLIB_GetAntiAliasing(void) {
 	return GRRLIB_Settings.antialias;
+}
+
+/**
+ * Turn deflicker on/off.
+ * @param aa Set to true to enable deflicker (Default: Disabled).
+ */
+INLINE
+void GRRLIB_SetDeflicker(const bool deflicker) {
+	GX_SetCopyFilter(GRRLIB_Settings.antialias ? rmode->aa : GX_FALSE, rmode->sample_pattern, deflicker ? GX_TRUE : GX_FALSE, rmode->vfilter);
+
+	GRRLIB_Settings.deflicker = deflicker;
+}
+
+/**
+ * Get current deflicker setting.
+ * @return True if deflicker is enabled.
+ */
+INLINE
+bool GRRLIB_GetDeflicker(void) {
+	return GRRLIB_Settings.deflicker;
 }

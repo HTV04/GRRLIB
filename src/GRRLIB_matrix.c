@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 #include <grrlib-mod.h>
 
-extern GRRLIB_drawSettings GRRLIB_Settings;
 extern Mtx GXmodelView2D;
 extern guVector axis2D;
 

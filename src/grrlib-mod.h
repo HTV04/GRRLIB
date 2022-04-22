@@ -95,12 +95,13 @@ typedef  enum GRRLIB_blendMode {
  * Structure to hold the current drawing settings.
  */
 typedef  struct GRRLIB_drawSettings {
-	u32               color;     /**< Drawing color. */
+	u32               color;     /**< Drawing color (can be set directly). */
 	u8                pointSize; /**< Point size. */
 	u8                lineWidth; /**< Line width. */
-	bool              antialias; /**< Anti-alias is enabled when set to true. */
-	GRRLIB_blendMode  blend;     /**< Blending Mode.                         */
-	int               lights;    /**< Active lights.                         */
+	GRRLIB_blendMode  blend;     /**< Blending mode. */
+	bool              antialias; /**< Anti-alias. */
+	int               deflicker; /**< Deflicker (aka vfilter). */
+	int               lights;    /**< Active lights. */
 } GRRLIB_drawSettings;
 
 //------------------------------------------------------------------------------
@@ -180,9 +181,10 @@ typedef  struct GRRLIB_matrix {
 # define GRR_INITS(...)
 #endif
 
-GRR_EXTERN  GXRModeObj  *rmode; /**< Video mode. */
-GRR_EXTERN  void        *xfb[2]  GRR_INITS(NULL, NULL);
-GRR_EXTERN  u32         fb       GRR_INIT(0);
+GRR_EXTERN  GRRLIB_drawSettings  GRRLIB_Settings;
+GRR_EXTERN  GXRModeObj           *rmode; /**< Video mode. */
+GRR_EXTERN  void                 *xfb[2]  GRR_INITS(NULL, NULL);
+GRR_EXTERN  u32                  fb       GRR_INIT(0);
 //==============================================================================
 // procedure and function prototypes
 // Inline function handling

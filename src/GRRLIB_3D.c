@@ -351,10 +351,6 @@ void GRRLIB_SetTexture(GRRLIB_texImg *tex, bool rep) {
 	}
 	if (GRRLIB_Settings.antialias == false) {
 		GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
-		GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
-	}
-	else {
-		GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
 	}
 
 	GX_LoadTexObj(&texObj,      GX_TEXMAP0);

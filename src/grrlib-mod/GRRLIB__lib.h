@@ -83,12 +83,6 @@ void  GRRLIB_Exit (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbAdvanced.c - Render to framebuffer: Advanced primitives
-void  GRRLIB_Plot       (const f32 x,      const f32 y);
-void  GRRLIB_Line       (const f32 x1,     const f32 y1,
-                         const f32 x2,     const f32 y2);
-void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
-                         const f32 width,  const f32 height,
-                         const bool filled);
 void  GRRLIB_Circle     (const f32 x,      const f32 y,
                          const f32 radius, const u8 filled);
 

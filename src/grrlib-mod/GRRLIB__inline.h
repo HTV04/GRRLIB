@@ -80,6 +80,12 @@ INLINE  void  GRRLIB_GXEngine (const guVector v[], const u32 color[],
 //------------------------------------------------------------------------------
 // GRRLIB_fbSimple.h -
 INLINE  void  GRRLIB_FillScreen (const u32 color);
+INLINE  void  GRRLIB_Plot       (const f32 x,  const f32 y);
+INLINE  void  GRRLIB_Line       (const f32 x1, const f32 y1,
+                                 const f32 x2, const f32 y2);
+INLINE  void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
+                                 const f32 width,  const f32 height,
+                                 const bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
@@ -94,10 +100,18 @@ INLINE void GRRLIB_SetPixelToFB (int x, int y, u32 pokeColor);
 
 //------------------------------------------------------------------------------
 // GRRLIB_settings.h - Rendering functions
+INLINE  void              GRRLIB_SetColor        (const u32 color);
+INLINE  u32               GRRLIB_GetColor        (void);
+INLINE  void              GRRLIB_SetPointSize    (const u8 pointSize);
+INLINE  u8                GRRLIB_GetPointSize    (void);
+INLINE  void              GRRLIB_SetLineWidth    (const u8 lineWidth);
+INLINE  u8                GRRLIB_GetLineWidth    (void);
 INLINE  void              GRRLIB_SetBlend        (const GRRLIB_blendMode blendmode);
 INLINE  GRRLIB_blendMode  GRRLIB_GetBlend        (void);
 INLINE  void              GRRLIB_SetAntiAliasing (const bool aa);
 INLINE  bool              GRRLIB_GetAntiAliasing (void);
+INLINE  void              GRRLIB_SetDeflicker    (const bool deflicker);
+INLINE  bool              GRRLIB_GetDeflicker    (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texSetup.h - Create and setup textures

@@ -26,8 +26,6 @@ THE SOFTWARE.
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-extern GRRLIB_drawSettings GRRLIB_Settings;
-
 static FT_Library ftLibrary; /**< A handle to a FreeType library instance. */
 
 // Static function prototypes

@@ -196,12 +196,13 @@ int  GRRLIB_Init (void) {
 
 	// Default settings
 	GRRLIB_Settings.color     = 0xFFFFFFFF;
-	GRRLIB_Settings.pointSize = 1;
-	GRRLIB_Settings.lineWidth = 1;
-	GRRLIB_Settings.blend     = GRRLIB_BLEND_ALPHA;
 	GRRLIB_Settings.antialias = true;
 	GRRLIB_Settings.deflicker = true;
 	GRRLIB_Settings.lights    = 0;
+
+	GRRLIB_SetPointSize(6);
+	GRRLIB_SetLineWidth(6);
+	GRRLIB_SetBlend(GRRLIB_BLEND_ALPHA);
 
 	// Schedule cleanup for when program exits
 	is_setup = true;

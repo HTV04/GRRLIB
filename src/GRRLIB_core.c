@@ -148,7 +148,7 @@ int  GRRLIB_Init (void) {
 	xfbHeight = GX_SetDispCopyYScale(yscale);
 	GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
 	GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
-	GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_FALSE, rmode->vfilter); // Anti-aliasing is set to true and deflicker is set to false by default
+	GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_FALSE, rmode->vfilter); // Anti-aliasing and deflicker are set to true by default
 	GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
 	GX_SetDispCopyGamma(GX_GM_1_0);
@@ -200,7 +200,7 @@ int  GRRLIB_Init (void) {
 	GRRLIB_Settings.lineWidth = 1;
 	GRRLIB_Settings.blend     = GRRLIB_BLEND_ALPHA;
 	GRRLIB_Settings.antialias = true;
-	GRRLIB_Settings.deflicker = false;
+	GRRLIB_Settings.deflicker = true;
 	GRRLIB_Settings.lights    = 0;
 
 	// Schedule cleanup for when program exits

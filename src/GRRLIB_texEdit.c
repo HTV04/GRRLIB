@@ -21,7 +21,7 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 #include <malloc.h>
-#include <pngu.h>
+#include <pngu-mod.h>
 #include <stdio.h>
 #include <jpeglib.h>
 #include <string.h>

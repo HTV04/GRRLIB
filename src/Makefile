@@ -29,7 +29,7 @@ endif
 NULLSTR :=
 PWD     := $(subst $(NULLSTR) ,\ ,$(shell pwd))
 
-INCLUDE	:= -I../lib/pngu -I$(PWD) -I$(LIBOGC_INC) -I$(DEVKITPRO)/portlibs/ppc/include -I$(DEVKITPRO)/portlibs/ppc/include/freetype2
+INCLUDE	:= -I../lib/pngu-mod -I$(PWD) -I$(LIBOGC_INC) -I$(DEVKITPRO)/portlibs/ppc/include -I$(DEVKITPRO)/portlibs/ppc/include/freetype2
 CFLAGS  := -O2 -Wall $(MACHDEP) $(INCLUDE)
 
 LIB		:= grrlib-mod

@@ -24,7 +24,7 @@ GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrr
 libgrrlib-mod      <- 2D/3D graphics library
 ├── libfat         <- File I/O
 ├── libjpeg        <- JPEG image processor
-├── libpngu        <- Wii wrapper for libpng
+├── libpngu-mod    <- Wii wrapper for libpng
 │   └── libpng     <- PNG image processor
 └── libfreetype    <- TrueType font processor
 ```
@@ -44,14 +44,14 @@ This guide is for Windows. If you are using macOS, Linux, or another compatible 
 
 ```text
 GRRLIB-mod  is supplied as source code
-libpngu     is available from the original GRRLIB repo
+libpngu-mod is supplied as source code
 libpng      is supplied via devkitPro pacman (ppc-libpng)
 libfreetype is supplied via devkitPro pacman (ppc-freetype)
 libjpeg     is supplied via devkitPro pacman (ppc-libjpeg-turbo)
 libfat      is supplied via devkitPro pacman (libfat-ogc)
 ```
 
-libpngu can be compiled and installed using the [instructions from the original GRRLIB repo](https://github.com/GRRLIB/GRRLIB#installing-grrlib).
+libpngu-mod is available [here](https://github.com/HTV04/libpngu-mod), and should be installed.
 
 The easy way is to install GRRLIB-mod and all the required libraries in a single command:
 ```bash
@@ -95,7 +95,7 @@ at the top of your .c/.cpp file and use the functions as required
 
 You will need to add:
 ```make
--lgrrlib-mod -lfreetype -lbz2 -lfat -ljpeg -lpngu -lpng -lz
+-lgrrlib-mod -lfreetype -lbz2 -lfat -ljpeg -lpngu-mod -lpng -lz
 ```
 to the libs line in your Makefile.
 

@@ -89,14 +89,14 @@ INLINE  void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
-INLINE  u32   GRRLIB_GetPixelFromtexImg (const int x, const int y,
-                                         const GRRLIB_texImg *tex);
+INLINE  u32   GRRLIB_GetPixelFromTexture (const int x, const int y,
+                                          const GRRLIB_texture *tex);
 
-INLINE  void  GRRLIB_SetPixelTotexImg   (const int x, const int y,
-                                         GRRLIB_texImg *tex, const u32 color);
+INLINE  void  GRRLIB_SetPixelToTexture   (const int x, const int y,
+                                          GRRLIB_texture *tex, const u32 color);
 
 INLINE u32 GRRLIB_GetPixelFromFB (int x, int y);
-INLINE void GRRLIB_SetPixelToFB (int x, int y, u32 pokeColor);
+INLINE void GRRLIB_SetPixelToFB  (int x, int y, u32 pokeColor);
 
 //------------------------------------------------------------------------------
 // GRRLIB_settings.h - Rendering functions
@@ -115,9 +115,9 @@ INLINE  bool              GRRLIB_GetDeflicker    (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texSetup.h - Create and setup textures
-INLINE  void            GRRLIB_ClearTex           (GRRLIB_texImg* tex);
-INLINE  void            GRRLIB_FlushTex           (GRRLIB_texImg *tex);
-INLINE  void            GRRLIB_FreeTexture        (GRRLIB_texImg *tex);
+INLINE  void            GRRLIB_ClearTexture    (GRRLIB_texture* tex);
+INLINE  void            GRRLIB_FinalizeTexture (GRRLIB_texture *tex);
+INLINE  void            GRRLIB_FreeTexture     (GRRLIB_texture *tex);
 
 //==============================================================================
 // Definitions of inlined functions

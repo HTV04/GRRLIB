@@ -29,17 +29,17 @@ THE SOFTWARE.
  * @param tex A pointer to a texture representing the screen or NULL if an error occurs.
  * @param clear When this flag is set to true, the screen is cleared after copy.
  */
-void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texImg *tex, bool clear) {
-    if(tex->data != NULL) {
-        GX_SetTexCopySrc(posx, posy, tex->w, tex->h);
-        GX_SetTexCopyDst(tex->w, tex->h, GX_TF_RGBA8, GX_FALSE);
-        GX_CopyTex(tex->data, GX_FALSE);
-        GX_PixModeSync();
-        GRRLIB_FlushTex(tex);
-        if(clear == true) {
-            GX_CopyDisp(xfb[!fb], GX_TRUE);
-        }
-    }
+void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texture *tex, bool clear) {
+	if(tex->data != NULL) {
+		GX_SetTexCopySrc(posx, posy, tex->w, tex->h);
+		GX_SetTexCopyDst(tex->w, tex->h, tex->fmt, GX_FALSE);
+		GX_CopyTex(tex->data, GX_FALSE);
+		GX_PixModeSync();
+		GRRLIB_FinalizeTexture(tex);
+		if(clear == true) {
+			GX_CopyDisp(xfb[!fb], GX_TRUE);
+		}
+	}
 }
 
 /**
@@ -47,8 +47,8 @@ void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texImg *tex, bool clear)
  * @see GRRLIB_CompoEnd
  */
 void GRRLIB_CompoStart (void) {
-    GX_SetPixelFmt(GX_PF_RGBA6_Z24, GX_ZC_LINEAR);
-    GX_PokeAlphaRead(GX_READ_NONE);
+	GX_SetPixelFmt(GX_PF_RGBA6_Z24, GX_ZC_LINEAR);
+	GX_PokeAlphaRead(GX_READ_NONE);
 }
 
 /**
@@ -59,13 +59,13 @@ void GRRLIB_CompoStart (void) {
  * @param posy top left corner of the grabbed part.
  * @param tex A pointer to a texture representing the screen or NULL if an error occurs.
  */
-void GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex) {
-    GRRLIB_Screen2Texture(posx, posy, tex, GX_TRUE);
+void GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texture *tex) {
+	GRRLIB_Screen2Texture(posx, posy, tex, GX_TRUE);
 
-    if (rmode->aa) {
-        GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
-    }
-    else {
-        GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR);
-    }
+	if (rmode->aa) {
+		GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
+	}
+	else {
+		GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR);
+	}
 }

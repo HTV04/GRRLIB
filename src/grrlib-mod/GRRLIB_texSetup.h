@@ -29,37 +29,41 @@ THE SOFTWARE.
 #include <string.h>
 
 /**
- * Write the contents of a texture in the data cache down to main memory.
- * For performance the CPU holds a data cache where modifications are stored before they get written down to main memory.
- * @param tex The texture to flush.
- */
-INLINE
-void  GRRLIB_FlushTex (GRRLIB_texImg *tex) {
-    DCFlushRange(tex->data, tex->w * tex->h * 4);
-}
-
-/**
- * Free memory allocated for texture.
- * If \a tex is a null pointer, the function does nothing.
- * @note This function does not change the value of \a tex itself, hence it still points to the same (now invalid) location.
- * @param tex A GRRLIB_texImg structure.
- */
-INLINE
-void  GRRLIB_FreeTexture (GRRLIB_texImg *tex) {
-    if(tex != NULL) {
-        if (tex->data != NULL) {
-            free(tex->data);
-        }
-        free(tex);
-    }
-}
-
-/**
  * Clear a texture to transparent black.
  * @param tex Texture to clear.
  */
 INLINE
-void  GRRLIB_ClearTex(GRRLIB_texImg* tex) {
-    memset(tex->data, 0, (tex->h * tex->w) << 2);
-    GRRLIB_FlushTex(tex);
+void  GRRLIB_ClearTexture(GRRLIB_texture* tex) {
+	memset(tex->data, 0, (tex->h * tex->w) << 2);
+}
+
+
+/**
+ * Write texture data to main memory and create a GXTexObj.
+ * For performance, the CPU holds a data cache where modifications are stored before they get written down to main memory.
+ * The texture should not be modified after this function is called.
+ * @param tex The texture to finalize.
+ */
+INLINE
+void  GRRLIB_FinalizeTexture(GRRLIB_texture *texture) {
+	// TODO: Add support for other texture formats.
+	DCFlushRange(texture->data, texture->w * texture->h * 4);
+	GX_InitTexObj(&texture->obj, texture->data, texture->w, texture->h,
+	              texture->fmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
+}
+
+/**
+ * Free memory allocated for a texture.
+ * If \a tex is a null pointer, the function does nothing.
+ * @note This function does not change the value of \a tex itself, hence it still points to the same (now invalid) location.
+ * @param texture A GRRLIB_texture structure.
+ */
+INLINE
+void  GRRLIB_FreeTexture(GRRLIB_texture *tex) {
+	if(tex != NULL) {
+		if (tex->data != NULL) {
+			free(tex->data);
+		}
+		free(tex);
+	}
 }

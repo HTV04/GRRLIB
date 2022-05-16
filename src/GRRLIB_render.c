@@ -39,24 +39,16 @@ extern  guVector             axis2D;
  * @param offsetX Specifies the x-coordinate offset.
  * @param offsetY Specifies the y-coordinate offset.
  */
-void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
-	GXTexObj  texObj;
+void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, GRRLIB_texture *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
 	u32       width, height;
 	Mtx       m, m1, m2, mv;
 	u32       color = GRRLIB_Settings.color;
 
-	if (tex == NULL || tex->data == NULL)  return;
+	if (tex == NULL)  return;
 
-	GX_InitTexObj(&texObj, tex->data, tex->w, tex->h,
-				  GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-
-	if (GRRLIB_Settings.antialias == false) {
-		GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
-	}
-
-	GX_LoadTexObj(&texObj,      GX_TEXMAP0);
+	GX_LoadTexObj(&tex->obj, GX_TEXMAP0);
 	GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-	GX_SetVtxDesc(GX_VA_TEX0,   GX_DIRECT);
+	GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
 	guMtxRotAxisDeg(m1, &axis2D, degrees);
 	guMtxIdentity(m2);

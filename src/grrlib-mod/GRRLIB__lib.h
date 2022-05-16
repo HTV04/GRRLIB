@@ -52,29 +52,29 @@ void  GRRLIB_InitTileSet  (GRRLIB_texImg *tex,
 
 //------------------------------------------------------------------------------
 // GRRLIB_bmfx.c - Bitmap f/x
-void  GRRLIB_BMFX_FlipH     (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest);
+void  GRRLIB_BMFX_FlipH     (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest);
 
-void  GRRLIB_BMFX_FlipV     (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest);
+void  GRRLIB_BMFX_FlipV     (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest);
 
-void  GRRLIB_BMFX_Grayscale (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest);
+void  GRRLIB_BMFX_Grayscale (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest);
 
-void  GRRLIB_BMFX_Sepia     (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest);
+void  GRRLIB_BMFX_Sepia     (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest);
 
-void  GRRLIB_BMFX_Invert    (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest);
+void  GRRLIB_BMFX_Invert    (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest);
 
-void  GRRLIB_BMFX_Blur      (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest, const u32 factor);
+void  GRRLIB_BMFX_Blur      (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest, const u32 factor);
 
-void  GRRLIB_BMFX_Scatter   (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest, const u32 factor);
+void  GRRLIB_BMFX_Scatter   (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest, const u32 factor);
 
-void  GRRLIB_BMFX_Pixelate  (const GRRLIB_texImg *texsrc,
-                             GRRLIB_texImg *texdest, const u32 factor);
+void  GRRLIB_BMFX_Pixelate  (const GRRLIB_texture *texsrc,
+                             GRRLIB_texture *texdest, const u32 factor);
 
 //------------------------------------------------------------------------------
 // GRRLIB_core.c - GRRLIB core functions
@@ -89,7 +89,7 @@ void  GRRLIB_Circle     (const f32 x,      const f32 y,
 //------------------------------------------------------------------------------
 // GRRLIB_fileIO - File I/O (SD Card)
 int              GRRLIB_LoadFile            (const char* filename, u8* *data);
-GRRLIB_texImg*   GRRLIB_LoadTextureFromFile (const char* filename);
+GRRLIB_texture*  GRRLIB_LoadTextureFromFile (const char* filename);
 GRRLIB_ttfFont*  GRRLIB_LoadTTFFromFile     (const char* filename);
 bool             GRRLIB_ScrShot             (const char* filename);
 
@@ -105,7 +105,7 @@ void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
 
 //------------------------------------------------------------------------------
 // GRRLIB_render.c - Rendering functions
-void  GRRLIB_DrawImg  (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
+void  GRRLIB_DrawImg  (const f32 xpos, const f32 ypos, GRRLIB_texture *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
                        const f32 offsetX, const f32 offsetY);
 
@@ -137,18 +137,21 @@ void  GRRLIB_Origin              (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_snapshot.c - Create a texture containing a snapshot of a part of the framebuffer
-void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texImg *tex, bool clear);
+void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texture *tex, bool clear);
 void  GRRLIB_CompoStart (void);
-void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex);
+void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texture *tex);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texEdit.c - Modifying the content of a texture
-GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h);
-GRRLIB_texImg*  GRRLIB_LoadTexture    (const u8 *my_img);
-GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png);
-GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);
-GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int);
-GRRLIB_texImg*  GRRLIB_LoadTextureBMP (const u8 *my_bmp);
+GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h);
+GRRLIB_texture*  GRRLIB_LoadTexture    (const u8 *my_img);
+GRRLIB_texture*  GRRLIB_LoadTextureEx  (const u8 *my_img, const u32 my_size);
+GRRLIB_texture*  GRRLIB_LoadTexturePNG (const u8 *my_png);
+GRRLIB_texture*  GRRLIB_LoadTextureBMP (const u8 *my_bmp);
+GRRLIB_texture*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);
+GRRLIB_texture*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const u32 my_size);
+GRRLIB_texture*  GRRLIB_LoadTextureTPL (const u8 *my_tpl, const u32 my_size, const s32 my_id);
+
 
 //------------------------------------------------------------------------------
 // GRRLIB_gecko.c - USB_Gecko output facilities

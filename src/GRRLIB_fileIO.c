@@ -37,38 +37,38 @@ THE SOFTWARE.
  *         -    >0 : FileLength.
  */
 int  GRRLIB_LoadFile(const char* filename, u8* *data) {
-    int   len;
-    FILE  *fd;
+	int   len;
+	FILE  *fd;
 
-    // Open the file
-    if ( !(fd = fopen(filename, "rb")) ) {
-        return -1;
-    }
+	// Open the file
+	if ( !(fd = fopen(filename, "rb")) ) {
+		return -1;
+	}
 
-    // Get file length
-    fseek(fd, 0, SEEK_END);
-    if ( !(len = ftell(fd)) ) {
-        fclose(fd);
-        *data = NULL;
-        return 0;
-    }
-    fseek(fd, 0, SEEK_SET);
+	// Get file length
+	fseek(fd, 0, SEEK_END);
+	if ( !(len = ftell(fd)) ) {
+		fclose(fd);
+		*data = NULL;
+		return 0;
+	}
+	fseek(fd, 0, SEEK_SET);
 
-    // Grab some memory in which to store the file
-    if ( (*data = malloc(len)) == NULL ) {
-        fclose(fd);
-        return -2;
-    }
+	// Grab some memory in which to store the file
+	if ( (*data = malloc(len)) == NULL ) {
+		fclose(fd);
+		return -2;
+	}
 
-    if ( fread(*data, 1, len, fd) != len) {
-        fclose(fd);
-        free(*data);
-        *data = NULL;
-        return -3;
-    }
+	if ( fread(*data, 1, len, fd) != len) {
+		fclose(fd);
+		free(*data);
+		*data = NULL;
+		return -3;
+	}
 
-    fclose(fd);
-    return len;
+	fclose(fd);
+	return len;
 }
 
 /**
@@ -77,22 +77,27 @@ int  GRRLIB_LoadFile(const char* filename, u8* *data) {
  * @return A GRRLIB_texImg structure filled with image information.
  *         If an error occurs NULL will be returned.
  */
-GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
-    GRRLIB_texImg  *tex;
-    u8             *data;
+GRRLIB_texture*  GRRLIB_LoadTextureFromFile(const char *filename) {
+	GRRLIB_texture  *tex;
+	u8              *data;
+	int              len;
 
-    // Return NULL if load fails
-    if (GRRLIB_LoadFile(filename, &data) <= 0) {
-        return NULL;
-    }
+	// Return NULL if load fails
+	len = GRRLIB_LoadFile(filename, &data);
+	if (len <= 0) {
+		return NULL;
+	}
 
-    // Convert to texture
-    tex = GRRLIB_LoadTexture(data);
+	// Convert to texture
+	tex = GRRLIB_LoadTextureEx(data, len);
+	if (tex == NULL) {
+		tex = GRRLIB_LoadTexture(data);
+	}
 
-    // Free up the buffer
-    free(data);
+	// Free up the buffer
+	free(data);
 
-    return tex;
+	return tex;
 }
 
 /**
@@ -102,23 +107,23 @@ GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
  *         If an error occurs NULL will be returned.
  */
 GRRLIB_ttfFont*  GRRLIB_LoadTTFFromFile(const char *filename) {
-    GRRLIB_ttfFont  *ttf;
-    u8              *data;
+	GRRLIB_ttfFont  *ttf;
+	u8              *data;
 
-    s32 size = GRRLIB_LoadFile(filename, &data);
+	s32 size = GRRLIB_LoadFile(filename, &data);
 
-    // Return NULL if load fails
-    if (size <= 0) {
-        return NULL;
-    }
+	// Return NULL if load fails
+	if (size <= 0) {
+		return NULL;
+	}
 
-    // Convert to TTF
-    ttf = GRRLIB_LoadTTF(data, size);
+	// Convert to TTF
+	ttf = GRRLIB_LoadTTF(data, size);
 
-    // Free up the buffer
-    free(data);
+	// Free up the buffer
+	free(data);
 
-    return ttf;
+	return ttf;
 }
 
 /**
@@ -129,14 +134,14 @@ GRRLIB_ttfFont*  GRRLIB_LoadTTFFromFile(const char *filename) {
  * @return bool true=everything worked, false=problems occurred.
  */
 bool  GRRLIB_ScrShot(const char* filename) {
-    int     ret = -1;
-    IMGCTX  pngContext = PNGU_SelectImageFromDevice(filename);
+	int     ret = -1;
+	IMGCTX  pngContext = PNGU_SelectImageFromDevice(filename);
 
-    if ( pngContext != NULL ) {
-        ret = PNGU_EncodeFromEFB( pngContext,
-                                  rmode->fbWidth, rmode->efbHeight,
-                                  0 );
-        PNGU_ReleaseImageContext(pngContext);
-    }
-    return !ret;
+	if ( pngContext != NULL ) {
+		ret = PNGU_EncodeFromEFB( pngContext,
+		                          rmode->fbWidth, rmode->efbHeight,
+		                          0 );
+		PNGU_ReleaseImageContext(pngContext);
+	}
+	return !ret;
 }

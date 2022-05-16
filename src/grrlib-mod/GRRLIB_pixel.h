@@ -38,8 +38,8 @@ THE SOFTWARE.
  * @return The color of a pixel in RGBA format.
  */
 INLINE
-u32  GRRLIB_GetPixelFromtexImg (const int x, const int y,
-								const GRRLIB_texImg *tex) {
+u32  GRRLIB_GetPixelFromTexture (const int x, const int y,
+								const GRRLIB_texture *tex) {
 	u32  offs;
 	u32  ar;
 	u8*  bp = (u8*)tex->data;
@@ -59,8 +59,8 @@ u32  GRRLIB_GetPixelFromtexImg (const int x, const int y,
  * @param color The color of the pixel in RGBA format.
  */
 INLINE
-void  GRRLIB_SetPixelTotexImg (const int x, const int y,
-							   GRRLIB_texImg *tex, const u32 color) {
+void  GRRLIB_SetPixelToTexture (const int x, const int y,
+							    GRRLIB_texture *tex, const u32 color) {
 	u32  offs;
 	u8*  bp = (u8*)tex->data;
 

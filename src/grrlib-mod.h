@@ -106,7 +106,21 @@ typedef  struct GRRLIB_drawSettings {
 
 //------------------------------------------------------------------------------
 /**
- * Structure to hold the texture information.
+ * Structure to hold texture data and information.
+ */
+typedef  struct GRRLIB_texture {
+	void*     data; /**< The texture data. */
+
+	u32       fmt; /**< The format of the texture. */
+	u32       w;   /**< The width of the texture in pixels. */
+	u32       h;   /**< The height of the texture in pixels. */
+
+	GXTexObj  obj; /**< The texture object. */
+} GRRLIB_texture;
+
+//------------------------------------------------------------------------------
+/**
+ * Structure to hold the texture information. (Deprecated)
  */
 typedef  struct GRRLIB_texImg {
 	u32    w;            /**< The width of the texture in pixels.  */
@@ -121,6 +135,7 @@ typedef  struct GRRLIB_texImg {
 	f32    ofnormaltexx; /**< Offset of normalized texture on x. */
 	f32    ofnormaltexy; /**< Offset of normalized texture on y. */
 
+	u32    fmt;          /**< Format of the texture.       */
 	void  *data;         /**< Pointer to the texture data. */
 } GRRLIB_texImg;
 

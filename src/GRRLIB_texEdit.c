@@ -440,7 +440,7 @@ GRRLIB_texture*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const u32 my_size) {
  * @return A GRRLIB_texture structure filled with texture information.
  */
 GRRLIB_texture*  GRRLIB_LoadTextureTPL (const u8 *my_tpl, const u32 my_size, const s32 my_id) {
-	void *tplData = malloc(my_size);
+	void *tplData = memalign(32, my_size);
 	TPLFile *tdf = malloc(sizeof(TPLFile));
 	u16 w, h;
 	GRRLIB_texture *my_texture = calloc(1, sizeof(GRRLIB_texture));

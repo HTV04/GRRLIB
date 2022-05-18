@@ -117,7 +117,7 @@ void  RawTo4x4RGBA (const u8 *src, void *dst,
  */
 GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h)
 {
-	GRRLIB_texture *my_texture = (struct GRRLIB_texture *)calloc(1, sizeof(GRRLIB_texture));
+	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	if (my_texture != NULL) {
 		my_texture->data = memalign(32, w * h * 4);
@@ -175,7 +175,7 @@ GRRLIB_texture*  GRRLIB_LoadTexturePNG (const u8 *my_png) {
 	int width = 0, height = 0;
 	PNGUPROP imgProp;
 	IMGCTX ctx;
-	GRRLIB_texture *my_texture = calloc(1, sizeof(GRRLIB_texture));
+	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	if (my_texture != NULL) {
 		ctx = PNGU_SelectImageFromBuffer(my_png);
@@ -228,7 +228,7 @@ GRRLIB_texture*  GRRLIB_LoadTextureBMP (const u8 *my_bmp) {
 	u16 pal_ref;
 	u32 BufferSize;
 	s32 y, x, i;
-	GRRLIB_texture *my_texture = calloc(1, sizeof(GRRLIB_texture));
+	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	if (my_texture != NULL) {
 		// Fill file header structure
@@ -386,7 +386,7 @@ GRRLIB_texture*  GRRLIB_LoadTextureJPG (const u8 *my_jpg) {
 GRRLIB_texture*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const u32 my_size) {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
-	GRRLIB_texture *my_texture = calloc(1, sizeof(GRRLIB_texture));
+	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	if (my_texture == NULL) {
 		return NULL;
@@ -443,7 +443,7 @@ GRRLIB_texture*  GRRLIB_LoadTextureTPL (const u8 *my_tpl, const u32 my_size, con
 	void *tplData = memalign(32, my_size);
 	TPLFile *tdf = malloc(sizeof(TPLFile));
 	u16 w, h;
-	GRRLIB_texture *my_texture = calloc(1, sizeof(GRRLIB_texture));
+	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	memcpy(tplData, (const void *) my_tpl, my_size);
 

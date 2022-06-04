@@ -30,19 +30,17 @@ THE SOFTWARE.
  * @param x Specifies the x-coordinate of the circle.
  * @param y Specifies the y-coordinate of the circle.
  * @param radius The radius of the circle.
- * @param filled Set to true to fill the circle.
+ * @param filled Set to @c true to fill the circle.
  */
 void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
 					 const u8 filled) {
 	guVector v[36];
 	u32 ncolor[36];
-	u32 a;
-	f32 ra;
-	f32 G_DTOR = M_DTOR * 10;
+	const f32 G_DTOR = M_DTOR * 10;
 	u32 color = GRRLIB_Settings.color;
 
-	for (a = 0; a < 36; a++) {
-		ra = a * G_DTOR;
+	for (u32 a = 0; a < 36; a++) {
+    	const f32 ra = a * G_DTOR;
 
 		v[a].x = cos(ra) * radius + x;
 		v[a].y = sin(ra) * radius + y;

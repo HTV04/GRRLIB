@@ -89,7 +89,7 @@ void  GRRLIB_Line (const f32 x1, const f32 y1,
  * @param y Specifies the y-coordinate of the upper-left corner of the rectangle.
  * @param width The width of the rectangle.
  * @param height The height of the rectangle.
- * @param filled Set to true to fill the rectangle.
+ * @param filled Set to @c true to fill the rectangle.
  */
 INLINE
 void  GRRLIB_Rectangle (const f32 x,      const f32 y,

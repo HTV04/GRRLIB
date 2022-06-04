@@ -24,7 +24,7 @@ GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrr
 libgrrlib-mod      <- 2D/3D graphics library
 ├── libfat         <- File I/O
 ├── libjpeg        <- JPEG image processor
-├── libpngu-mod    <- Wii wrapper for libpng
+├── libpngu-mod    <- Wrapper for libpng
 │   └── libpng     <- PNG image processor
 └── libfreetype    <- TrueType font processor
 ```

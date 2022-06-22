@@ -2,28 +2,42 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
-ifeq ($(strip $(DEVKITPPC)),)
-$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC)
-endif
-
 ifeq ($(strip $(DEVKITPRO)),)
 $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitPro)
 endif
 
-ifeq ($(PLATFORM),cube)
-include $(DEVKITPPC)/gamecube_rules
+ifeq ($(strip $(DEVKITPPC)),)
+$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC)
+endif
 
-MACHDEP		+=	-DHW_DOL
+ifeq ($(PLATFORM),cube)
+ifeq ($(LIBOGC),libogc)
+include $(DEVKITPPC)/gamecube_rules
 
 INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/gamecube/include
 INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/gamecube/lib
 else
-include $(DEVKITPPC)/wii_rules
+include $(DEVKITPRO)/libogc-mod/gamecube_rules
 
-MACHDEP		+=	-DHW_RVL
+INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/libogc-mod/portlibs/gamecube/include
+INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/libogc-mod/portlibs/gamecube/lib
+endif
+
+MACHDEP		+=	-DHW_DOL
+else
+ifeq ($(LIBOGC),libogc)
+include $(DEVKITPPC)/wii_rules
 
 INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/wii/include
 INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/wii/lib
+else
+include $(DEVKITPRO)/libogc-mod/wii_rules
+
+INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/libogc-mod/portlibs/wii/include
+INSTALL_LIB	:=	$(DESTDIR)$(DEVKITPRO)/libogc-mod/portlibs/wii/lib
+endif
+
+MACHDEP		+=	-DHW_RVL
 endif
 
 NULLSTR :=

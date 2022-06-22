@@ -22,11 +22,12 @@ GRRLIB-mod is supplied as a standard C/C++ library (aka. archive) called "libgrr
 
 ```
 libgrrlib-mod      <- 2D/3D graphics library
-├── libfat         <- File I/O
-├── libjpeg        <- JPEG image processor
 ├── libpngu-mod    <- Wrapper for libpng
 │   └── libpng     <- PNG image processor
-└── libfreetype    <- TrueType font processor
+├── libjpeg        <- JPEG image processor
+├── libfreetype    <- TrueType font processor
+├── libogc-mod     <- Critical Wii/GameCube modules
+└── libfat-mod     <- File I/O
 ```
 
 ## Developing for the Wii/GameCube
@@ -46,18 +47,23 @@ This guide is for Windows. If you are using macOS, Linux, or another compatible 
 GRRLIB-mod  is supplied as source code
 libpngu-mod is supplied as source code
 libpng      is supplied via devkitPro pacman (ppc-libpng)
-libfreetype is supplied via devkitPro pacman (ppc-freetype)
 libjpeg     is supplied via devkitPro pacman (ppc-libjpeg-turbo)
-libfat      is supplied via devkitPro pacman (libfat-ogc)
+libfreetype is supplied via devkitPro pacman (ppc-freetype)
+libogc-mod  is supplied as source code
+libfat-mod  is supplied as source code
 ```
 
 libpngu-mod is available [here](https://github.com/HTV04/libpngu-mod), and should be installed.
+
+libogc-mod is available [here](https://github.com/HTV04/libogc-mod). It is based off of libogc and contains various fixes. However, if you wish to compile GRRLIB-mod against the original libogc, append `LIBOGC=libogc` to the arguments of `make`.
+
+libfat-mod is available [here](https://github.com/HTV04/libfat-mod), and is required if compiling with libogc-mod. Otherwise, install `libfat-ogc` via devkitPro pacman.
 
 The easy way is to install GRRLIB-mod and all the required libraries in a single command:
 ```bash
   c:
   cd \grr\src
-  pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
+  pacman -S ppc-libpng ppc-freetype ppc-libjpeg-turbo
   make clean all install
 ```
 
@@ -69,7 +75,7 @@ Each library could also be installed individually:
 
 Install libfat, libpng, libfreetype and libjpeg with their dependencies:
 ```bash
-  pacman -S libfat-ogc ppc-libpng ppc-freetype ppc-libjpeg-turbo
+  pacman -S ppc-libpng ppc-freetype ppc-libjpeg-turbo
 ```
 
 To install libgrrlib-mod for Wii:

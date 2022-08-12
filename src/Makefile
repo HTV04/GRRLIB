@@ -10,8 +10,8 @@ ifeq ($(strip $(DEVKITPPC)),)
 $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC)
 endif
 
-ifeq ($(PLATFORM),cube)
-ifeq ($(LIBOGC),libogc)
+ifeq ($(GRRLIB_PLATFORM),cube)
+ifeq ($(GRRLIB_LIBOGC),libogc)
 include $(DEVKITPPC)/gamecube_rules
 
 INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/gamecube/include
@@ -25,7 +25,7 @@ endif
 
 MACHDEP		+=	-DHW_DOL
 else
-ifeq ($(LIBOGC),libogc)
+ifeq ($(GRRLIB_LIBOGC),libogc)
 include $(DEVKITPPC)/wii_rules
 
 INSTALL_INC	:=	$(DESTDIR)$(DEVKITPRO)/portlibs/wii/include

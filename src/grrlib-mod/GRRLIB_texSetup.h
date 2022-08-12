@@ -30,40 +30,74 @@ THE SOFTWARE.
 
 /**
  * Clear a texture to transparent black.
- * @param tex Texture to clear.
+ * @param texture Texture to clear.
  */
 INLINE
-void  GRRLIB_ClearTexture(GRRLIB_texture* tex) {
-	memset(tex->data, 0, (tex->h * tex->w) << 2);
+void  GRRLIB_ClearTexture(GRRLIB_texture *texture) {
+	memset(texture->data, 0, (texture->height * texture->width) << 2);
 }
 
+/**
+ * Initialize a texture's internal texture part.
+ * @param texture Texture to clear.
+ */
+INLINE
+void  GRRLIB_SetTexturePart(GRRLIB_texture *texture) {
+	texture->part.x = 0;
+	texture->part.y = 0;
+	texture->part.width = 1;
+	texture->part.height = 1;
+
+	texture->part.realX = 0;
+	texture->part.realY = 0;
+	texture->part.realWidth = texture->width;
+	texture->part.realHeight = texture->height;
+
+	texture->part.textureWidth = texture->width;
+	texture->part.textureHeight = texture->height;
+}
 
 /**
  * Write texture data to main memory and create a GXTexObj.
  * For performance, the CPU holds a data cache where modifications are stored before they get written down to main memory.
  * The texture should not be modified after this function is called.
- * @param tex The texture to finalize.
+ * @param texture The texture to finalize.
  */
 INLINE
 void  GRRLIB_FinalizeTexture(GRRLIB_texture *texture) {
 	// TODO: Add support for other texture formats.
-	DCFlushRange(texture->data, texture->w * texture->h * 4);
-	GX_InitTexObj(&texture->obj, texture->data, texture->w, texture->h,
+	DCFlushRange(texture->data, texture->width * texture->height * 4);
+	GX_InitTexObj(&texture->obj, texture->data, texture->width, texture->height,
 	              texture->fmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
+
+	GRRLIB_SetTexturePart(texture);
 }
 
 /**
  * Free memory allocated for a texture.
- * If \a tex is a null pointer, the function does nothing.
- * @note This function does not change the value of \a tex itself, hence it still points to the same (now invalid) location.
+ * If \a texture is a null pointer, the function does nothing.
+ * @note This function does not change the value of \a texture itself, hence it still points to the same (now invalid) location.
  * @param texture A GRRLIB_texture structure.
  */
 INLINE
-void  GRRLIB_FreeTexture(GRRLIB_texture *tex) {
-	if(tex != NULL) {
-		if (tex->data != NULL) {
-			free(tex->data);
+void  GRRLIB_FreeTexture(GRRLIB_texture *texture) {
+	if(texture != NULL) {
+		if (texture->data != NULL) {
+			free(texture->data);
 		}
-		free(tex);
+		free(texture);
+	}
+}
+
+/**
+ * Free memory allocated for a texture part.
+ * If \a texturePart is a null pointer, the function does nothing.
+ * @note This function does not change the value of \a texturePart itself, hence it still points to the same (now invalid) location.
+ * @param texturePart A GRRLIB_texturePart structure.
+ */
+INLINE
+void  GRRLIB_FreeTexturePart(GRRLIB_texturePart *texturePart) {
+	if(texturePart != NULL) {
+		free(texturePart);
 	}
 }

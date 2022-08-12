@@ -41,6 +41,12 @@ It is recommended to use the `mod` branch of the GRRLIB-mod repo. Simply clone t
 This document will presume that you have clone this repository to a directory called  `C:\grr` for simplicity.
 
 ## Installing GRRLIB-mod
+### Pacman
+The quickest way to install GRRLIB-mod is by adding the `htv-dkp-libs` repository, allowing you to install GRRLIB-mod and its dependencies from pacman. Follow the instructions [here](https://github.com/HTV04/htv-dkp-libs).
+
+After setting up the repository, install the `wii-grrlib-mod` and/or `gamecube-grrlib-mod` package(s) via pacman.
+
+### Manual installation
 This guide is for Windows. If you are using macOS, Linux, or another compatible operating system, you will need to convert these instructions.
 
 ```text
@@ -55,7 +61,7 @@ libfat-mod  is supplied as source code
 
 libpngu-mod is available [here](https://github.com/HTV04/libpngu-mod), and should be installed.
 
-libogc-mod is available [here](https://github.com/HTV04/libogc-mod). It is based off of libogc and contains various fixes. However, if you wish to compile GRRLIB-mod against the original libogc, append `LIBOGC=libogc` to the arguments of `make`.
+libogc-mod is available [here](https://github.com/HTV04/libogc-mod). It is based off of libogc and contains various fixes. However, if you wish to compile GRRLIB-mod against the original libogc, append `GRRLIB_LIBOGC=libogc` to the arguments of `make`.
 
 libfat-mod is available [here](https://github.com/HTV04/libfat-mod), and is required if compiling with libogc-mod. Otherwise, install `libfat-ogc` via devkitPro pacman.
 
@@ -89,7 +95,7 @@ To install libgrrlib-mod for GameCube:
 ```bash
   c:
   cd \grr\src
-  make PLATFORM=cube clean all install
+  make GRRLIB_PLATFORM=cube clean all install
 ```
 
 ## Using GRRLIB-mod

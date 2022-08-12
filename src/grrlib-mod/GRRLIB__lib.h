@@ -105,24 +105,23 @@ void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
 
 //------------------------------------------------------------------------------
 // GRRLIB_render.c - Rendering functions
-void  GRRLIB_DrawImg  (const f32 xpos, const f32 ypos, GRRLIB_texture *tex,
-                       const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const f32 offsetX, const f32 offsetY);
+void  GRRLIB_DrawTexture (const f32 xPos, const f32 yPos, const GRRLIB_texture *tex,
+                          const f32 degrees, const f32 scaleX, const f32 scaleY,
+                          const f32 offsetX, const f32 offsetY);
 
-void  GRRLIB_DrawImgQuad  (const guVector pos[4], GRRLIB_texImg *tex);
+void  GRRLIB_DrawTexturePart (const f32 xPos, const f32 yPos, const GRRLIB_texture *tex,
+                              const GRRLIB_texturePart *texPart, const f32 degrees, const f32 scaleX,
+                              const f32 scaleY, const f32 offsetX, const f32 offsetY);
+
+void  GRRLIB_DrawTextureQuad (const guVector pos[4], GRRLIB_texImg *tex);
 
 void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
                        const f32 offsetX, const f32 offsetY, const int frame);
 
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
-                       const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
-                       const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const f32 offsetX, const f32 offsetY);
-
 void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const int frame);
 
-void  GRRLIB_Render  (void);
+void  GRRLIB_Render (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_matrix.c - Matrix functions
@@ -142,8 +141,8 @@ void  GRRLIB_CompoStart (void);
 void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texture *tex);
 
 //------------------------------------------------------------------------------
-// GRRLIB_texEdit.c - Modifying the content of a texture
-GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h);
+// GRRLIB_texEdit.c - Modifying the content of a texture and texture coordinates
+GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 width, const u32 height);
 GRRLIB_texture*  GRRLIB_LoadTexture    (const u8 *my_img);
 GRRLIB_texture*  GRRLIB_LoadTextureEx  (const u8 *my_img, const u32 my_size);
 GRRLIB_texture*  GRRLIB_LoadTexturePNG (const u8 *my_png);
@@ -152,6 +151,8 @@ GRRLIB_texture*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);
 GRRLIB_texture*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const u32 my_size);
 GRRLIB_texture*  GRRLIB_LoadTextureTPL (const u8 *my_tpl, const u32 my_size, const s32 my_id);
 
+GRRLIB_texturePart*  GRRLIB_CreateTexturePart   (const f32 x, const f32 y, const f32 width, const f32 height, const GRRLIB_texture *texture);
+GRRLIB_texturePart*  GRRLIB_CreateTexturePartEx (const f32 x, const f32 y, const f32 width, const f32 height, const u32 teturexWidth, const u32 textureHeight);
 
 //------------------------------------------------------------------------------
 // GRRLIB_gecko.c - USB_Gecko output facilities

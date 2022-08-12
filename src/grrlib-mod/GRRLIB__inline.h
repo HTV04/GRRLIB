@@ -114,10 +114,12 @@ INLINE  void              GRRLIB_SetDeflicker    (const bool deflicker);
 INLINE  bool              GRRLIB_GetDeflicker    (void);
 
 //------------------------------------------------------------------------------
-// GRRLIB_texSetup.h - Create and setup textures
-INLINE  void            GRRLIB_ClearTexture    (GRRLIB_texture* tex);
-INLINE  void            GRRLIB_FinalizeTexture (GRRLIB_texture *tex);
-INLINE  void            GRRLIB_FreeTexture     (GRRLIB_texture *tex);
+// GRRLIB_texSetup.h - Create and setup textures and texture coordinates
+INLINE  void            GRRLIB_ClearTexture    (GRRLIB_texture *texture);
+INLINE  void            GRRLIB_SetTexturePart  (GRRLIB_texture *texture);
+INLINE  void            GRRLIB_FinalizeTexture (GRRLIB_texture *texture);
+INLINE  void            GRRLIB_FreeTexture     (GRRLIB_texture *texture);
+INLINE  void            GRRLIB_FreeTexturePart (GRRLIB_texturePart *texturePart);
 
 //==============================================================================
 // Definitions of inlined functions

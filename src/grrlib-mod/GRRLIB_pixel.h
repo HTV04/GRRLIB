@@ -44,7 +44,7 @@ u32  GRRLIB_GetPixelFromTexture (const int x, const int y,
 	u32  ar;
 	u8*  bp = (u8*)tex->data;
 
-	offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+	offs = (((y&(~3))<<2)*tex->width) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
 
 	ar =                 (u32)(*((u16*)(bp+offs   )));
 	return (ar<<24) | ( ((u32)(*((u16*)(bp+offs+32)))) <<8) | (ar>>8);  // Wii is big-endian
@@ -64,7 +64,7 @@ void  GRRLIB_SetPixelToTexture (const int x, const int y,
 	u32  offs;
 	u8*  bp = (u8*)tex->data;
 
-	offs = (((y&(~3))<<2)*tex->w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+	offs = (((y&(~3))<<2)*tex->width) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
 
 	*((u16*)(bp+offs   )) = (u16)((color <<8) | (color >>24));
 	*((u16*)(bp+offs+32)) = (u16) (color >>8);

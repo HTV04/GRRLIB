@@ -30,8 +30,8 @@ extern  guVector             axis2D;
 
 /**
  * Draw a texture.
- * @param xpos Specifies the x-coordinate of the upper-left corner.
- * @param ypos Specifies the y-coordinate of the upper-left corner.
+ * @param xPos Specifies the x-coordinate of the upper-left corner.
+ * @param yPos Specifies the y-coordinate of the upper-left corner.
  * @param tex The texture to draw.
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
@@ -39,14 +39,28 @@ extern  guVector             axis2D;
  * @param offsetX Specifies the x-coordinate offset.
  * @param offsetY Specifies the y-coordinate offset.
  */
-void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, GRRLIB_texture *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
-	u32       width, height;
-	Mtx       m, m1, m2, mv;
-	u32       color = GRRLIB_Settings.color;
+void  GRRLIB_DrawTexture (const f32 xPos, const f32 yPos, const GRRLIB_texture *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
+	GRRLIB_DrawTexturePart(xPos, yPos, tex, &tex->part, degrees, scaleX, scaleY, offsetX, offsetY);
+}
 
-	if (tex == NULL)  return;
+/**
+ * Draw a part of a texture.
+ * @param xPos Specifies the x-coordinate of the upper-left corner.
+ * @param yPos Specifies the y-coordinate of the upper-left corner.
+ * @param tex The texture to draw.
+ * @param texPart The part of the texture to draw.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param offsetX Specifies the x-coordinate offset.
+ * @param offsetY Specifies the y-coordinate offset.
+ */
+void  GRRLIB_DrawTexturePart (const f32 xPos, const f32 yPos, const GRRLIB_texture *tex, const GRRLIB_texturePart *texPart, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
+	Mtx  m, m1, m2, mv;
 
-	GX_LoadTexObj(&tex->obj, GX_TEXMAP0);
+	if ((tex == NULL) || (texPart == NULL))  return;
+
+	GX_LoadTexObj(&((GRRLIB_texture *) tex)->obj, GX_TEXMAP0);
 	GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
 	GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
@@ -56,29 +70,26 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, GRRLIB_texture *tex, const
 	guMtxScaleApply(m2, m2, scaleX, scaleY, 1.0);
 	guMtxConcat(m1, m2, m);
 
-	guMtxTransApply(m, m, xpos, ypos, 0.0);
+	guMtxTransApply(m, m, xPos, yPos, 0.0);
 	guMtxConcat(GXmodelView2D, m, mv);
-
-	width  = tex->w;
-	height = tex->h;
 
 	GX_LoadPosMtxImm(mv, GX_PNMTX0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
 		GX_Position3f32(0, 0, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(0, 0);
+		GX_Color1u32   (GRRLIB_Settings.color);
+		GX_TexCoord2f32(texPart->x, texPart->y);
 
-		GX_Position3f32(width, 0, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(1, 0);
+		GX_Position3f32(texPart->realWidth, 0, 0);
+		GX_Color1u32   (GRRLIB_Settings.color);
+		GX_TexCoord2f32(texPart->width, texPart->y);
 
-		GX_Position3f32(width, height, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(1, 1);
+		GX_Position3f32(texPart->realWidth, texPart->realHeight, 0);
+		GX_Color1u32   (GRRLIB_Settings.color);
+		GX_TexCoord2f32(texPart->width, texPart->height);
 
-		GX_Position3f32(0, height, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(0, 1);
+		GX_Position3f32(0, texPart->realHeight, 0);
+		GX_Color1u32   (GRRLIB_Settings.color);
+		GX_TexCoord2f32(texPart->x, texPart->height);
 	GX_End();
 	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
@@ -91,7 +102,7 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, GRRLIB_texture *tex, const
  * @param pos Vector array of the 4 points.
  * @param tex The texture to draw.
  */
-void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex) {
+void  GRRLIB_DrawTextureQuad (const guVector pos[4], GRRLIB_texImg *tex) {
 	GXTexObj  texObj;
 	Mtx       m, m1, m2, mv;
 	u32       color = GRRLIB_Settings.color;
@@ -180,83 +191,6 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
 
 	width  = tex->tilew * 0.5f - offsetX;
 	height = tex->tileh * 0.5f - offsetY;
-
-	guMtxIdentity  (m1);
-	guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
-	guMtxRotAxisDeg(m2, &axis2D, degrees);
-	guMtxConcat    (m2, m1, m);
-
-	guMtxTransApply(m, m, xpos, ypos, 0);
-	guMtxConcat(GXmodelView2D, m, mv);
-
-	GX_LoadPosMtxImm(mv, GX_PNMTX0);
-	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-		GX_Position3f32(-offsetX, -offsetY, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(s1, t1);
-
-		GX_Position3f32(width, -offsetY, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(s2, t1);
-
-		GX_Position3f32(width, height, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(s2, t2);
-
-		GX_Position3f32(-offsetX, height, 0);
-		GX_Color1u32   (color);
-		GX_TexCoord2f32(s1, t2);
-	GX_End();
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
-
-	GX_SetTevOp  (GX_TEVSTAGE0, GX_PASSCLR);
-	GX_SetVtxDesc(GX_VA_TEX0,   GX_NONE);
-}
-
-/**
- * Draw a part of a texture.
- * @param xpos Specifies the x-coordinate of the upper-left corner.
- * @param ypos Specifies the y-coordinate of the upper-left corner.
- * @param partx Specifies the x-coordinate of the upper-left corner in the texture.
- * @param party Specifies the y-coordinate of the upper-left corner in the texture.
- * @param partw Specifies the width in the texture.
- * @param parth Specifies the height in the texture.
- * @param tex The texture containing the tile to draw.
- * @param degrees Angle of rotation.
- * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
- * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
- * @param offsetX Specifies the x-coordinate offset.
- * @param offsetY Specifies the y-coordinate offset.
- */
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const f32 offsetX, const f32 offsetY) {
-	GXTexObj  texObj;
-	f32       width, height;
-	Mtx       m, m1, m2, mv;
-	f32       s1, s2, t1, t2;
-	u32       color = GRRLIB_Settings.color;
-
-	if (tex == NULL || tex->data == NULL)  return;
-
-	// The 0.001f/x is the frame correction formula by spiffen
-	s1 = (partx /tex->w) +(0.001f /tex->w);
-	s2 = ((partx + partw)/tex->w) -(0.001f /tex->w);
-	t1 = (party /tex->h) +(0.001f /tex->h);
-	t2 = ((party + parth)/tex->h) -(0.001f /tex->h);
-
-	GX_InitTexObj(&texObj, tex->data,
-				  tex->w, tex->h,
-				  GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-
-	if (GRRLIB_Settings.antialias == false) {
-		GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
-	}
-
-	GX_LoadTexObj(&texObj,      GX_TEXMAP0);
-	GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
-	GX_SetVtxDesc(GX_VA_TEX0,   GX_DIRECT);
-
-	width  = partw * 0.5f;
-	height = parth * 0.5f;
 
 	guMtxIdentity  (m1);
 	guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);

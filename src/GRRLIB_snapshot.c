@@ -34,8 +34,8 @@ void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texture *tex, bool clear
         return;
     }
 
-	GX_SetTexCopySrc(posx, posy, tex->w, tex->h);
-	GX_SetTexCopyDst(tex->w, tex->h, tex->fmt, GX_FALSE);
+	GX_SetTexCopySrc(posx, posy, tex->width, tex->height);
+	GX_SetTexCopyDst(tex->width, tex->height, tex->fmt, GX_FALSE);
 	GX_CopyTex(tex->data, GX_FALSE);
 	GX_PixModeSync();
 	GRRLIB_FinalizeTexture(tex);

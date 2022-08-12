@@ -106,16 +106,37 @@ typedef  struct GRRLIB_drawSettings {
 
 //------------------------------------------------------------------------------
 /**
+ * Structure to hold coordinates of a texture.
+ */
+typedef  struct GRRLIB_texturePart {
+	f32   x;
+	f32   y;
+	f32   width;
+	f32   height;
+
+	f32   realX;
+	f32   realY;
+	f32   realWidth;
+	f32   realHeight;
+
+	f32   textureWidth;
+	f32   textureHeight;
+} GRRLIB_texturePart;
+
+//------------------------------------------------------------------------------
+/**
  * Structure to hold texture data and information.
  */
 typedef  struct GRRLIB_texture {
-	void*     data; /**< The texture data. */
+	void  *data; /**< The texture data. */
 
-	u32       fmt; /**< The format of the texture. */
-	u32       w;   /**< The width of the texture in pixels. */
-	u32       h;   /**< The height of the texture in pixels. */
+	u32   fmt;    /**< The format of the texture. */
+	u32   width;  /**< The width of the texture in pixels. */
+	u32   height; /**< The height of the texture in pixels. */
 
-	GXTexObj  obj; /**< The texture object. */
+
+	GXTexObj             obj;  /**< The texture object. */
+	GRRLIB_texturePart   part; /**< A full part of the texture. */
 } GRRLIB_texture;
 
 //------------------------------------------------------------------------------

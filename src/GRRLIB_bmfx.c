@@ -31,10 +31,10 @@ THE SOFTWARE.
  * @param texdest The texture destination.
  */
 void  GRRLIB_BMFX_FlipH (const GRRLIB_texture *texsrc, GRRLIB_texture *texdest) {
-	unsigned int x, y, txtWidth = texsrc->w - 1;
+	unsigned int x, y, txtWidth = texsrc->width - 1;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			GRRLIB_SetPixelToTexture(txtWidth - x, y, texdest,
 				GRRLIB_GetPixelFromTexture(x, y, texsrc));
 		}
@@ -48,10 +48,10 @@ void  GRRLIB_BMFX_FlipH (const GRRLIB_texture *texsrc, GRRLIB_texture *texdest) 
  * @param texdest The texture destination.
  */
 void  GRRLIB_BMFX_FlipV (const GRRLIB_texture *texsrc, GRRLIB_texture *texdest) {
-	unsigned int x, y, texHeight = texsrc->h - 1;
+	unsigned int x, y, texHeight = texsrc->height - 1;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			GRRLIB_SetPixelToTexture(x, texHeight - y, texdest,
 				GRRLIB_GetPixelFromTexture(x, y, texsrc));
 		}
@@ -68,8 +68,8 @@ void  GRRLIB_BMFX_Grayscale (const GRRLIB_texture *texsrc,
 							 GRRLIB_texture *texdest) {
 	unsigned int x, y;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			u32 color = GRRLIB_GetPixelFromTexture(x, y, texsrc);
 
 			u8 gray = ((GRRLIB_R(color)* 77 +
@@ -94,8 +94,8 @@ void  GRRLIB_BMFX_Sepia (const GRRLIB_texture *texsrc, GRRLIB_texture *texdest) 
 	u16           sr, sg, sb;
 	u32           color;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			color = GRRLIB_GetPixelFromTexture(x, y, texsrc);
 			sr = GRRLIB_R(color)*0.393 + GRRLIB_G(color)*0.769 + GRRLIB_B(color)*0.189;
 			sg = GRRLIB_R(color)*0.349 + GRRLIB_G(color)*0.686 + GRRLIB_B(color)*0.168;
@@ -117,8 +117,8 @@ void  GRRLIB_BMFX_Invert (const GRRLIB_texture *texsrc, GRRLIB_texture *texdest)
 	unsigned int x, y;
 	u32 color;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			color = GRRLIB_GetPixelFromTexture(x, y, texsrc);
 			GRRLIB_SetPixelToTexture(x, y, texdest,
 				((0xFFFFFF - (color >> 8 & 0xFFFFFF)) << 8)  | (color & 0xFF));
@@ -143,8 +143,8 @@ void  GRRLIB_BMFX_Blur (const GRRLIB_texture *texsrc,
 	u32 colours[numba];
 	u32 thiscol;
 
-	for (x = 0; x < texsrc->w; x++) {
-		for (y = 0; y < texsrc->h; y++) {
+	for (x = 0; x < texsrc->width; x++) {
+		for (y = 0; y < texsrc->height; y++) {
 			newr = 0;
 			newg = 0;
 			newb = 0;
@@ -155,7 +155,7 @@ void  GRRLIB_BMFX_Blur (const GRRLIB_texture *texsrc,
 
 			for (k = x - factor; k <= x + factor; k++) {
 				for (l = y - factor; l <= y + factor; l++) {
-					if (k < 0 || k >= texsrc->w || l < 0 || l >= texsrc->h) {
+					if (k < 0 || k >= texsrc->width || l < 0 || l >= texsrc->height) {
 						colours[tmp] = thiscol;
 					}
 					else {
@@ -196,12 +196,12 @@ void  GRRLIB_BMFX_Scatter (const GRRLIB_texture *texsrc,
 	u32 val3, val4;
 	int factorx2 = factor*2;
 
-	for (y = 0; y < texsrc->h; y++) {
-		for (x = 0; x < texsrc->w; x++) {
+	for (y = 0; y < texsrc->height; y++) {
+		for (x = 0; x < texsrc->width; x++) {
 			val1 = x + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
 			val2 = y + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
 
-			if ((val1 >= texsrc->w) || (val2 >= texsrc->h)) {
+			if ((val1 >= texsrc->width) || (val2 >= texsrc->height)) {
 			}
 			else {
 				val3 = GRRLIB_GetPixelFromTexture(x, y, texsrc);
@@ -226,8 +226,8 @@ void  GRRLIB_BMFX_Pixelate (const GRRLIB_texture *texsrc,
 	unsigned int xx, yy;
 	u32 rgb;
 
-	for (x = 0; x < texsrc->w - 1 - factor; x += factor) {
-		for (y = 0; y < texsrc->h - 1 - factor; y +=factor) {
+	for (x = 0; x < texsrc->width - 1 - factor; x += factor) {
+		for (y = 0; y < texsrc->height - 1 - factor; y +=factor) {
 			rgb = GRRLIB_GetPixelFromTexture(x, y, texsrc);
 			for (xx = x; xx < x + factor; xx++) {
 				for (yy = y; yy < y + factor; yy++) {

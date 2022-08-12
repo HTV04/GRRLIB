@@ -115,19 +115,19 @@ void  RawTo4x4RGBA (const u8 *src, void *dst,
  * @param h Height of the new texture to create.
  * @return A GRRLIB_texture structure newly created.
  */
-GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h)
+GRRLIB_texture*  GRRLIB_CreateEmptyTexture (const u32 width, const u32 height)
 {
 	GRRLIB_texture *my_texture = malloc(sizeof(GRRLIB_texture));
 
 	if (my_texture != NULL) {
-		my_texture->data = memalign(32, w * h * 4);
+		my_texture->data = memalign(32, width * height * 4);
 
 		my_texture->fmt = GX_TF_RGBA8;
-		my_texture->w = w;
-		my_texture->h = h;
+		my_texture->width = width;
+		my_texture->height = height;
 
 		// Initialize the texture
-		memset(my_texture->data, '\0', (w * h) << 2);
+		memset(my_texture->data, '\0', (width * height) << 2);
 
 		GRRLIB_FinalizeTexture(my_texture);
 	}
@@ -184,11 +184,11 @@ GRRLIB_texture*  GRRLIB_LoadTexturePNG (const u8 *my_png) {
 		my_texture->data = PNGU_DecodeTo4x4RGBA8(ctx, imgProp.imgWidth, imgProp.imgHeight, &width, &height, NULL);
 		if (my_texture->data != NULL) {
 			my_texture->fmt = GX_TF_RGBA8;
-			my_texture->w = width;
-			my_texture->h = height;
+			my_texture->width = width;
+			my_texture->height = height;
 			if (imgProp.imgWidth != width || imgProp.imgHeight != height) {
 				// PNGU has resized the texture
-				memset(my_texture->data, 0, (my_texture->h * my_texture->w) << 2);
+				memset(my_texture->data, 0, (my_texture->height * my_texture->width) << 2);
 			}
 			GRRLIB_FinalizeTexture(my_texture);
 		}
@@ -253,8 +253,8 @@ GRRLIB_texture*  GRRLIB_LoadTextureBMP (const u8 *my_bmp) {
 		my_texture->data = memalign(32, MyBitmapHeader.biWidth * MyBitmapHeader.biHeight * 4);
 		if (my_texture->data != NULL && MyBitmapFileHeader.bfType == 0x4D42) {
 			RGBQUAD *Palette;
-			my_texture->w = MyBitmapHeader.biWidth;
-			my_texture->h = MyBitmapHeader.biHeight;
+			my_texture->width = MyBitmapHeader.biWidth;
+			my_texture->height = MyBitmapHeader.biHeight;
 			my_texture->fmt = GX_TF_RGBA8;
 			switch(MyBitmapHeader.biBitCount) {
 				case 32:    // RGBA images
@@ -424,8 +424,8 @@ GRRLIB_texture*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const u32 my_size) {
 	free(tempBuffer);
 
 	my_texture->fmt = GX_TF_RGBA8;
-	my_texture->w = cinfo.output_width;
-	my_texture->h = cinfo.output_height;
+	my_texture->width = cinfo.output_width;
+	my_texture->height = cinfo.output_height;
 
 	GRRLIB_FinalizeTexture(my_texture);
 
@@ -452,10 +452,53 @@ GRRLIB_texture*  GRRLIB_LoadTextureTPL (const u8 *my_tpl, const u32 my_size, con
 	}
 
 	TPL_GetTextureInfo(tdf, my_id, &my_texture->fmt, &w, &h);
-	my_texture->w = (u32) w;
-	my_texture->h = (u32) h;
+	my_texture->width = (u32) w;
+	my_texture->height = (u32) h;
 
 	TPL_GetTexture(tdf, my_id, &my_texture->obj); // No need to finalize texture
 
+	GRRLIB_SetTexturePart(my_texture);
+
 	return my_texture;
+}
+
+/**
+ * Define coordinates of a texture and store them for later use.
+ * @param x X coordinate of the texture.
+ * @param y Y coordinate of the texture.
+ * @param width Width of the part of the texture.
+ * @param height Height of the part of the texture.
+ * @param texture Texture to use as the reference width and height.
+ */
+GRRLIB_texturePart*  GRRLIB_CreateTexturePart (const f32 x, const f32 y, const f32 width, const f32 height, const GRRLIB_texture *texture) {
+	return GRRLIB_CreateTexturePartEx(x, y, width, height, texture->width, texture->height);
+}
+
+/**
+ * Define texture coordinates and store them for later use.
+ * @param x X coordinate of the texture.
+ * @param y Y coordinate of the texture.
+ * @param width Width of the part of the texture.
+ * @param height Height of the part of the texture.
+ * @param textureWidth Width of the texture.
+ * @param textureHeight Height of the texture.
+ */
+GRRLIB_texturePart*  GRRLIB_CreateTexturePartEx (const f32 x, const f32 y, const f32 width, const f32 height, const u32 textureWidth, const u32 textureHeight) {
+	GRRLIB_texturePart *texPart = malloc(sizeof(GRRLIB_texturePart));
+
+	// The 0.001f/x is the frame correction formula by spiffen
+	texPart->x = (x /textureWidth) +(0.001f /textureWidth);
+	texPart->y = (y /textureHeight) +(0.001f /textureHeight);
+	texPart->width = ((x + width)/textureWidth) -(0.001f /textureWidth);
+	texPart->height = ((y + height)/textureHeight) -(0.001f /textureHeight);
+
+	texPart->realX = x;
+	texPart->realY = y;
+	texPart->realWidth = width;
+	texPart->realHeight = height;
+
+	texPart->textureWidth = textureWidth;
+	texPart->textureHeight = textureHeight;
+
+	return texPart;
 }

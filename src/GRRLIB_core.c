@@ -26,7 +26,6 @@ THE SOFTWARE.
 #include <ogc/conf.h>
 #include <stdio.h>
 #include <ogc/machine/processor.h>
-#include <fat.h>
 
 #define __GRRLIB_CORE__
 #include <grrlib-mod.h>
@@ -46,8 +45,7 @@ static bool  is_setup = false;  // To control entry and exit
  * @return A integer representing a code:
  *         -     0 : The operation completed successfully.
  *         -    -1 : Not enough memory is available to initialize GRRLIB.
- *         -    -2 : Failed to add the fat device driver to the devoptab.
- *         -    -3 : Failed to initialize the font engine.
+ *         -    -2 : Failed to initialize the font engine.
  * @see GRRLIB_Exit
  */
 int  GRRLIB_Init (void) {
@@ -208,14 +206,9 @@ int  GRRLIB_Init (void) {
 	is_setup = true;
 	atexit(GRRLIB_Exit);
 
-	// Initialise the filing system
-	if (fatInitDefault() == false) {
-		error_code = -2;
-	}
-
 	// Initialise TTF
 	if (GRRLIB_InitTTF() != 0) {
-		error_code = -3;
+		error_code = -2;
 	}
 
 	VIDEO_SetBlack(false);  // Enable video output

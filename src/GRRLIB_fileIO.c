@@ -129,7 +129,6 @@ GRRLIB_ttfFont*  GRRLIB_LoadTTFFromFile(const char *filename) {
 /**
  * Make a PNG screenshot.
  * It should be called after drawing stuff on the screen, but before GRRLIB_Render().
- * libfat is required to use the function.
  * @param filename Name of the file to write.
  * @return Returns @c true if everything worked, @c false if problems occurred.
  */

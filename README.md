@@ -107,7 +107,7 @@ at the top of your .c/.cpp file and use the functions as required
 
 You will need to add:
 ```make
--lgrrlib-mod -lfreetype -lbz2 -lfat -ljpeg -lpngu-mod -lpng -lz
+-lgrrlib-mod -lfreetype -lbz2 -ljpeg -lpngu-mod -lpng -lz
 ```
 to the libs line in your Makefile.
 

@@ -29,8 +29,7 @@ THE SOFTWARE.
  * Fill screen with a specific color.
  * @param color The color to use to fill the screen.
  */
-static  inline
-void  GRRLIB_FillScreen (const u32 color) {
+static inline void  GRRLIB_FillScreen (const u32 color) {
 	f32 x = -40.0f;
 	f32 y = -40.0f;
 	f32 x2 = x + GRRLIB_VideoMode->fbWidth + 80.0f;
@@ -54,8 +53,7 @@ void  GRRLIB_FillScreen (const u32 color) {
  * @param y Specifies the y-coordinate of the dot.
  * @author Jespa
  */
-static  inline
-void  GRRLIB_Plot (const f32 x, const f32 y) {
+static inline void  GRRLIB_Plot (const f32 x, const f32 y) {
 	GX_Begin(GX_POINTS, GX_VTXFMT0, 1);
 		GX_Position3f32(x, y, 0.0f);
 		GX_Color1u32(GRRLIB_Settings.color);
@@ -70,8 +68,7 @@ void  GRRLIB_Plot (const f32 x, const f32 y) {
  * @param y2 Ending point for line for the x coordinate.
  * @author JESPA
  */
-static  inline
-void  GRRLIB_Line (const f32 x1, const f32 y1,
+static inline void  GRRLIB_Line (const f32 x1, const f32 y1,
 				   const f32 x2, const f32 y2) {
 	u32 color = GRRLIB_Settings.color;
 
@@ -91,8 +88,7 @@ void  GRRLIB_Line (const f32 x1, const f32 y1,
  * @param height The height of the rectangle.
  * @param filled Set to @c true to fill the rectangle.
  */
-static  inline
-void  GRRLIB_Rectangle (const f32 x,      const f32 y,
+static inline void  GRRLIB_Rectangle (const f32 x,      const f32 y,
 						const f32 width,  const f32 height,
 						const bool filled) {
 	f32 x2 = x + width;

@@ -23,15 +23,17 @@ THE SOFTWARE.
 /**
  * @file GRRLIB__lib.h
  * GRRLIB library function prototypes.
- * Do not include GRRLIB__lib.h directly, include only GRRLIB.h.
+ * Do not include GRRLIB__lib.h directly, include only grrlib-mod.h.
  */
 /**
  * @addtogroup AllFunc
  * @{
  */
 
+#pragma once
+
 #ifndef __GRRLIB_H__
-#  error Do not include GRRLIB__lib.h directly, include only GRRLIB.h
+#  error Do not include GRRLIB__lib.h directly, include only grrlib-mod.h
 #endif
 
 #ifndef __GRRLIB_FNLIB_H__

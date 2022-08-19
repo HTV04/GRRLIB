@@ -31,6 +31,8 @@ THE SOFTWARE.
  * @{
  */
 
+#pragma once
+
 #ifndef __GRRLIB_H__
 #define __GRRLIB_H__
 
@@ -207,31 +209,18 @@ typedef  struct GRRLIB_matrix {
 //==============================================================================
 // Allow general access to screen and frame information
 //==============================================================================
-#if defined __GRRLIB_CORE__
-# define GRR_EXTERN
-# define GRR_INIT(v)     = v
-# define GRR_INITS(...)  = { __VA_ARGS__ }
-#else
-# define GRR_EXTERN      extern
-# define GRR_INIT(v)
-# define GRR_INITS(...)
-#endif
+extern  GRRLIB_drawSettings  GRRLIB_Settings;
+extern  GXRModeObj           *GRRLIB_VideoMode;
+extern  void                 *GRRLIB_XFB[2];
+extern  u32                  GRRLIB_FB;
 
-GRR_EXTERN  GRRLIB_drawSettings  GRRLIB_Settings;
-GRR_EXTERN  GXRModeObj           *rmode; /**< Video mode. */
-GRR_EXTERN  void                 *xfb[2]  GRR_INITS(NULL, NULL);
-GRR_EXTERN  u32                  fb       GRR_INIT(0);
+extern  Mtx                  GRRLIB_View2D;
+extern  guVector             GRRLIB_Axis2D;
 //==============================================================================
 // procedure and function prototypes
 // Inline function handling
 //==============================================================================
 #include "grrlib-mod/GRRLIB__lib.h"
-
-#if defined __GRRLIB_CORE__
-#  define INLINE
-#else
-#  define INLINE static inline
-#endif
 #include "grrlib-mod/GRRLIB__inline.h"
 
 //==============================================================================

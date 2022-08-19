@@ -27,18 +27,22 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <ogc/machine/processor.h>
 
-#define __GRRLIB_CORE__
 #include <grrlib-mod.h>
 #include "grrlib-mod/GRRLIB_private.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024) /**< GX fifo buffer size. */
 
-Mtx       GXmodelView2D;
-guVector  axis2D = (guVector){0, 0, 1};
+static void *gp_fifo = NULL;
 
-static void  *gp_fifo = NULL;
+static bool is_setup = false;  // To control entry and exit
 
-static bool  is_setup = false;  // To control entry and exit
+GRRLIB_drawSettings GRRLIB_Settings;
+GXRModeObj *GRRLIB_VideoMode;
+void *GRRLIB_XFB[2] = {NULL, NULL};
+u32 GRRLIB_FB = 0;
+
+Mtx GRRLIB_View2D;
+guVector GRRLIB_Axis2D = {0, 0, 1};
 
 /**
  * Initialize GRRLIB. Call this once at the beginning your code.
@@ -64,21 +68,21 @@ int  GRRLIB_Init (void) {
 	VIDEO_SetBlack(true);  // Disable video output during initialisation
 
 	// Grab a pointer to the video mode attributes
-	rmode = VIDEO_GetPreferredMode(NULL);
-	if (rmode == NULL) {
+	GRRLIB_VideoMode = VIDEO_GetPreferredMode(NULL);
+	if (GRRLIB_VideoMode == NULL) {
 		return -1;
 	}
 
 	// Video Mode Correction
-	switch (rmode->viTVMode) {
+	switch (GRRLIB_VideoMode->viTVMode) {
 		case VI_DEBUG_PAL:  // PAL 50hz 576i
-			//rmode = &TVPal574IntDfScale;
-			rmode = &TVPal528IntDf; // BC ...this is still wrong, but "less bad" for now
+			//GRRLIB_VideoMode = &TVPal574IntDfScale;
+			GRRLIB_VideoMode = &TVPal528IntDf; // BC ...this is still wrong, but "less bad" for now
 			break;
 		default:
 #ifdef HW_DOL
 			if(VIDEO_HaveComponentCable()) {
-				rmode = &TVNtsc480Prog;
+				GRRLIB_VideoMode = &TVNtsc480Prog;
 			}
 #endif
 			break;
@@ -87,12 +91,12 @@ int  GRRLIB_Init (void) {
 #if defined(HW_RVL)
 	// 16:9 and 4:3 Screen Adjustment for Wii
 	if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
-		rmode->viWidth = 678;
+		GRRLIB_VideoMode->viWidth = 678;
 	} else {    // 4:3
-		rmode->viWidth = 672;
+		GRRLIB_VideoMode->viWidth = 672;
 	}
 	// This probably needs to consider PAL
-	rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - rmode->viWidth) / 2;
+	GRRLIB_VideoMode->viXOrigin = (VI_MAX_WIDTH_NTSC - GRRLIB_VideoMode->viWidth) / 2;
 #endif
 
 #if defined(HW_RVL)
@@ -105,22 +109,22 @@ int  GRRLIB_Init (void) {
 #endif
 
 	// --
-	VIDEO_Configure(rmode);
+	VIDEO_Configure(GRRLIB_VideoMode);
 
 	// Get some memory to use for a "double buffered" frame buffer
-	if ( !(xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+	if ( !(GRRLIB_XFB[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(GRRLIB_VideoMode))) ) {
 		return -1;
 	}
-	if ( !(xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+	if ( !(GRRLIB_XFB[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(GRRLIB_VideoMode))) ) {
 		return -1;
 	}
 
-	VIDEO_SetNextFramebuffer(xfb[fb]);  // Choose a frame buffer to start with
+	VIDEO_SetNextFramebuffer(GRRLIB_XFB[GRRLIB_FB]);  // Choose a frame buffer to start with
 
 	VIDEO_Flush();                      // flush the frame to the TV
 	VIDEO_WaitVSync();                  // Wait for the TV to finish updating
 	// If the TV image is interlaced it takes two passes to display the image
-	if (rmode->viTVMode & VI_NON_INTERLACE) {
+	if (GRRLIB_VideoMode->viTVMode & VI_NON_INTERLACE) {
 		VIDEO_WaitVSync();
 	}
 
@@ -134,7 +138,7 @@ int  GRRLIB_Init (void) {
 	// Clear the background to opaque black and clears the z-buffer
 	GX_SetCopyClear((GXColor){ 0, 0, 0, 0 }, GX_MAX_Z24);
 
-	if (rmode->aa) {
+	if (GRRLIB_VideoMode->aa) {
 		GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);  // Set 16 bit RGB565
 	}
 	else {
@@ -142,16 +146,16 @@ int  GRRLIB_Init (void) {
 	}
 
 	// Other GX setup
-	yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
+	yscale    = GX_GetYScaleFactor(GRRLIB_VideoMode->efbHeight, GRRLIB_VideoMode->xfbHeight);
 	xfbHeight = GX_SetDispCopyYScale(yscale);
-	GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
-	GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
-	GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_FALSE, rmode->vfilter); // Anti-aliasing and deflicker are set to true by default
-	GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
+	GX_SetDispCopySrc(0, 0, GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight);
+	GX_SetDispCopyDst(GRRLIB_VideoMode->fbWidth, xfbHeight);
+	GX_SetCopyFilter(GRRLIB_VideoMode->aa, GRRLIB_VideoMode->sample_pattern, GX_FALSE, GRRLIB_VideoMode->vfilter); // Anti-aliasing and deflicker are set to true by default
+	GX_SetFieldMode(GRRLIB_VideoMode->field_rendering, ((GRRLIB_VideoMode->viHeight == 2 * GRRLIB_VideoMode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
 	GX_SetDispCopyGamma(GX_GM_1_0);
 
-	if (rmode->fbWidth <= 0) { printf("GRRLIB " GRRLIB_VER_STRING); }
+	if (GRRLIB_VideoMode->fbWidth <= 0) { printf("GRRLIB " GRRLIB_VER_STRING); }
 
 	// Setup the vertex descriptor
 	GX_ClearVtxDesc();      // clear all the vertex descriptors
@@ -176,15 +180,15 @@ int  GRRLIB_Init (void) {
 	GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
 	// Default matrix settings, reflected in GRRLIB_Origin()
-	guMtxIdentity(GXmodelView2D);
-	guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0, 0.0, -100.0);
+	guMtxIdentity(GRRLIB_View2D);
+	guMtxTransApply(GRRLIB_View2D, GRRLIB_View2D, 0.0, 0.0, -100.0);
 
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 
-	guOrtho(perspective, 0.0f, rmode->efbHeight, 0.0f, rmode->fbWidth, 0.0f, 1000.0f);
+	guOrtho(perspective, 0.0f, GRRLIB_VideoMode->efbHeight, 0.0f, GRRLIB_VideoMode->fbWidth, 0.0f, 1000.0f);
 	GX_LoadProjectionMtx(perspective, GX_ORTHOGRAPHIC);
 
-	GX_SetViewport(0.0f, 0.0f, rmode->fbWidth, rmode->efbHeight, 0.0f, 1.0f);
+	GX_SetViewport(0.0f, 0.0f, GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight, 0.0f, 1.0f);
 	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
 	GX_SetAlphaUpdate(GX_TRUE);
 	GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -231,7 +235,7 @@ void  GRRLIB_Exit (void) {
 
 	// Allow write access to the full screen
 	GX_SetClipMode( GX_CLIP_DISABLE );
-	GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+	GX_SetScissor( 0, 0, GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight );
 
 	// We empty both frame buffers on our way out
 	// otherwise dead frames are sometimes seen when starting the next app
@@ -243,13 +247,13 @@ void  GRRLIB_Exit (void) {
 	GX_AbortFrame();
 
 	// Free up memory allocated for frame buffers & FIFOs
-	if (xfb[0] != NULL) {
-		free(MEM_K1_TO_K0(xfb[0]));
-		xfb[0] = NULL;
+	if (GRRLIB_XFB[0] != NULL) {
+		free(MEM_K1_TO_K0(GRRLIB_XFB[0]));
+		GRRLIB_XFB[0] = NULL;
 	}
-	if (xfb[1] != NULL) {
-		free(MEM_K1_TO_K0(xfb[1]));
-		xfb[1] = NULL;
+	if (GRRLIB_XFB[1] != NULL) {
+		free(MEM_K1_TO_K0(GRRLIB_XFB[1]));
+		GRRLIB_XFB[1] = NULL;
 	}
 	if (gp_fifo != NULL) {
 		free(gp_fifo);

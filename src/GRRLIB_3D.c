@@ -86,7 +86,7 @@ void GRRLIB_3dMode(f32 minDist, f32 maxDist, f32 fov, bool texturemode, bool nor
 	Mtx44 m;
 
 	guLookAt(_GRR_view, &_GRR_cam, &_GRR_up, &_GRR_look);
-	guPerspective(m, fov, (f32)rmode->fbWidth/rmode->efbHeight, minDist, maxDist);
+	guPerspective(m, fov, (f32)GRRLIB_VideoMode->fbWidth/GRRLIB_VideoMode->efbHeight, minDist, maxDist);
 	GX_LoadProjectionMtx(m, GX_PERSPECTIVE);
 	GX_SetZMode (GX_TRUE, GX_LEQUAL, GX_TRUE);
 
@@ -130,7 +130,7 @@ void GRRLIB_2dMode() {
 
 	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
 
-	guOrtho(m, 0, rmode->efbHeight, 0, rmode->fbWidth, 0, 1000.0f);
+	guOrtho(m, 0, GRRLIB_VideoMode->efbHeight, 0, GRRLIB_VideoMode->fbWidth, 0, 1000.0f);
 	GX_LoadProjectionMtx(m, GX_ORTHOGRAPHIC);
 
 	guMtxIdentity(view);

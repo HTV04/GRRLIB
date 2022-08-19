@@ -40,7 +40,7 @@ void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texture *tex, bool clear
 	GX_PixModeSync();
 	GRRLIB_FinalizeTexture(tex);
 	if(clear == true) {
-		GX_CopyDisp(xfb[!fb], GX_TRUE);
+		GX_CopyDisp(GRRLIB_XFB[!GRRLIB_FB], GX_TRUE);
 	}
 }
 
@@ -64,7 +64,7 @@ void GRRLIB_CompoStart (void) {
 void GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texture *tex) {
 	GRRLIB_Screen2Texture(posx, posy, tex, GX_TRUE);
 
-	if (rmode->aa) {
+	if (GRRLIB_VideoMode->aa) {
 		GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
 	}
 	else {

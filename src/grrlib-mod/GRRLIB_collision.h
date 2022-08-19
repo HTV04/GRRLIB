@@ -35,7 +35,7 @@ THE SOFTWARE.
  * @param wpady Specifies the y-coordinate of the point.
  * @return If the specified point lies within the rectangle, the return value is @c true otherwise it's @c false.
  */
-INLINE
+static  inline
 bool  GRRLIB_PtInRect (const int hotx,   const int hoty,
                        const int hotw,   const int hoth,
                        const int wpadx,  const int wpady) {
@@ -55,7 +55,7 @@ bool  GRRLIB_PtInRect (const int hotx,   const int hoty,
  * @param rect2h Specifies the height of the rectangle.
  * @return If the specified rectangle lies within the other rectangle, the return value is @c true otherwise it's @c false.
  */
-INLINE
+static  inline
 bool  GRRLIB_RectInRect (const int rect1x, const int rect1y,
                          const int rect1w, const int rect1h,
                          const int rect2x, const int rect2y,
@@ -77,7 +77,7 @@ bool  GRRLIB_RectInRect (const int rect1x, const int rect1y,
  * @param rect2h Specifies the height of the second rectangle.
  * @return If the specified rectangle lies on the other rectangle, the return value is @c true otherwise it's @c false.
  */
-INLINE
+static  inline
 bool  GRRLIB_RectOnRect (const int rect1x, const int rect1y,
                          const int rect1w, const int rect1h,
                          const int rect2x, const int rect2y,

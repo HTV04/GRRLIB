@@ -138,7 +138,7 @@ bool  GRRLIB_ScrShot(const char* filename) {
 
 	if ( pngContext != NULL ) {
 		ret = PNGU_EncodeFromEFB( pngContext,
-		                          rmode->fbWidth, rmode->efbHeight,
+		                          GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight,
 		                          0 );
 		PNGU_ReleaseImageContext(pngContext);
 	}

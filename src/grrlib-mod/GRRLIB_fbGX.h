@@ -32,7 +32,7 @@ THE SOFTWARE.
  * @param n Number of points in the vector.
  * @param fmt Type of primitive.
  */
-INLINE
+static  inline
 void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
                        const u8 fmt) {
     GX_Begin(fmt, GX_VTXFMT0, n);

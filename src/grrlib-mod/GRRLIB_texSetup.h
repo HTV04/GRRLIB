@@ -32,7 +32,7 @@ THE SOFTWARE.
  * Clear a texture to transparent black.
  * @param texture Texture to clear.
  */
-INLINE
+static  inline
 void  GRRLIB_ClearTexture(GRRLIB_texture *texture) {
 	memset(texture->data, 0, (texture->height * texture->width) << 2);
 }
@@ -41,7 +41,7 @@ void  GRRLIB_ClearTexture(GRRLIB_texture *texture) {
  * Initialize a texture's internal texture part.
  * @param texture Texture to clear.
  */
-INLINE
+static  inline
 void  GRRLIB_SetTexturePart(GRRLIB_texture *texture) {
 	texture->part.x = 0;
 	texture->part.y = 0;
@@ -63,7 +63,7 @@ void  GRRLIB_SetTexturePart(GRRLIB_texture *texture) {
  * The texture should not be modified after this function is called.
  * @param texture The texture to finalize.
  */
-INLINE
+static  inline
 void  GRRLIB_FinalizeTexture(GRRLIB_texture *texture) {
 	// TODO: Add support for other texture formats.
 	DCFlushRange(texture->data, texture->width * texture->height * 4);
@@ -79,7 +79,7 @@ void  GRRLIB_FinalizeTexture(GRRLIB_texture *texture) {
  * @note This function does not change the value of \a texture itself, hence it still points to the same (now invalid) location.
  * @param texture A GRRLIB_texture structure.
  */
-INLINE
+static  inline
 void  GRRLIB_FreeTexture(GRRLIB_texture *texture) {
 	if(texture != NULL) {
 		if (texture->data != NULL) {
@@ -95,7 +95,7 @@ void  GRRLIB_FreeTexture(GRRLIB_texture *texture) {
  * @note This function does not change the value of \a texturePart itself, hence it still points to the same (now invalid) location.
  * @param texturePart A GRRLIB_texturePart structure.
  */
-INLINE
+static  inline
 void  GRRLIB_FreeTexturePart(GRRLIB_texturePart *texturePart) {
 	if(texturePart != NULL) {
 		free(texturePart);

@@ -38,7 +38,7 @@ THE SOFTWARE.
  * Set drawing color.
  * @param color The drawing color to set.
  */
-INLINE
+static  inline
 void GRRLIB_SetColor(const u32 color) {
 	GRRLIB_Settings.color = color;
 }
@@ -47,7 +47,7 @@ void GRRLIB_SetColor(const u32 color) {
  * Get drawing color.
  * @return The current drawing color.
  */
-INLINE
+static  inline
 u32 GRRLIB_GetColor(void) {
 	return GRRLIB_Settings.color;
 }
@@ -56,7 +56,7 @@ u32 GRRLIB_GetColor(void) {
  * Set point size.
  * @param pointSize The point size to set.
  */
-INLINE
+static  inline
 void GRRLIB_SetPointSize(const u8 pointSize) {
 	GRRLIB_Settings.pointSize = pointSize;
 
@@ -67,7 +67,7 @@ void GRRLIB_SetPointSize(const u8 pointSize) {
  * Get point size.
  * @return The current point size.
  */
-INLINE
+static  inline
 u8 GRRLIB_GetPointSize(void) {
 	return GRRLIB_Settings.pointSize;
 }
@@ -76,7 +76,7 @@ u8 GRRLIB_GetPointSize(void) {
  * Set line width.
  * @param lineWidth The line width to set.
  */
-INLINE
+static  inline
 void GRRLIB_SetLineWidth(const u8 lineWidth) {
 	GRRLIB_Settings.lineWidth = lineWidth;
 
@@ -87,7 +87,7 @@ void GRRLIB_SetLineWidth(const u8 lineWidth) {
  * Get line width.
  * @return The current line width.
  */
-INLINE
+static  inline
 u8 GRRLIB_GetLineWidth(void) {
 	return GRRLIB_Settings.lineWidth;
 }
@@ -96,7 +96,7 @@ u8 GRRLIB_GetLineWidth(void) {
  * Set a blending mode.
  * @param blendmode The blending mode to use (Default: GRRLIB_BLEND_ALPHA).
  */
-INLINE
+static  inline
 void GRRLIB_SetBlend(const GRRLIB_blendMode blendmode) {
 	GRRLIB_Settings.blend = blendmode;
 	switch(GRRLIB_Settings.blend) {
@@ -122,7 +122,7 @@ void GRRLIB_SetBlend(const GRRLIB_blendMode blendmode) {
  * Get the current blending mode.
  * @return The current blending mode.
  */
-INLINE
+static  inline
 GRRLIB_blendMode  GRRLIB_GetBlend(void) {
 	return GRRLIB_Settings.blend;
 }
@@ -131,9 +131,9 @@ GRRLIB_blendMode  GRRLIB_GetBlend(void) {
  * Turn anti-aliasing on/off.
  * @param aa Set to @c true to enable anti-aliasing (Default: Enabled).
  */
-INLINE
+static  inline
 void GRRLIB_SetAntiAliasing(const bool aa) {
-	GX_SetCopyFilter(aa ? rmode->aa : GX_FALSE, rmode->sample_pattern, GRRLIB_Settings.deflicker ? GX_TRUE : GX_FALSE, rmode->vfilter);
+	GX_SetCopyFilter(aa ? GRRLIB_VideoMode->aa : GX_FALSE, GRRLIB_VideoMode->sample_pattern, GRRLIB_Settings.deflicker ? GX_TRUE : GX_FALSE, GRRLIB_VideoMode->vfilter);
 
 	GRRLIB_Settings.antialias = aa;
 }
@@ -142,7 +142,7 @@ void GRRLIB_SetAntiAliasing(const bool aa) {
  * Get current anti-aliasing setting.
  * @return Returns @c true if anti-aliasing is enabled.
  */
-INLINE
+static  inline
 bool GRRLIB_GetAntiAliasing(void) {
 	return GRRLIB_Settings.antialias;
 }
@@ -151,9 +151,9 @@ bool GRRLIB_GetAntiAliasing(void) {
  * Turn deflicker on/off.
  * @param aa Set to @c true to enable deflicker (Default: Disabled).
  */
-INLINE
+static  inline
 void GRRLIB_SetDeflicker(const bool deflicker) {
-	GX_SetCopyFilter(GRRLIB_Settings.antialias ? rmode->aa : GX_FALSE, rmode->sample_pattern, deflicker ? GX_TRUE : GX_FALSE, rmode->vfilter);
+	GX_SetCopyFilter(GRRLIB_Settings.antialias ? GRRLIB_VideoMode->aa : GX_FALSE, GRRLIB_VideoMode->sample_pattern, deflicker ? GX_TRUE : GX_FALSE, GRRLIB_VideoMode->vfilter);
 
 	GRRLIB_Settings.deflicker = deflicker;
 }
@@ -162,7 +162,7 @@ void GRRLIB_SetDeflicker(const bool deflicker) {
  * Get current deflicker setting.
  * @return Returns @c true if deflicker is enabled.
  */
-INLINE
+static  inline
 bool GRRLIB_GetDeflicker(void) {
 	return GRRLIB_Settings.deflicker;
 }

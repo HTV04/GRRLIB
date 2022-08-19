@@ -31,7 +31,7 @@ THE SOFTWARE.
  * @param color The color of the points in RGBA format.
  * @param n Number of points in the vector array.
  */
-INLINE
+static  inline
 void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
 	GRRLIB_GXEngine(v, color, n, GX_POINTS);
 }
@@ -42,7 +42,7 @@ void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
  * @param color The color of the filled polygon in RGBA format.
  * @param n Number of points in the vector.
  */
-INLINE
+static  inline
 void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
 	GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
 }
@@ -53,7 +53,7 @@ void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
  * @param color The color of the filled polygon in RGBA format.
  * @param n Number of points in the vector.
  */
-INLINE
+static  inline
 void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[], const long n) {
 	GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
 }

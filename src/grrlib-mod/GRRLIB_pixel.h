@@ -37,7 +37,7 @@ THE SOFTWARE.
  * @param tex The texture to get the color from.
  * @return The color of a pixel in RGBA format.
  */
-INLINE
+static  inline
 u32  GRRLIB_GetPixelFromTexture (const int x, const int y,
 								const GRRLIB_texture *tex) {
 	u32  offs;
@@ -58,7 +58,7 @@ u32  GRRLIB_GetPixelFromTexture (const int x, const int y,
  * @param tex The texture to set the color to.
  * @param color The color of the pixel in RGBA format.
  */
-INLINE
+static  inline
 void  GRRLIB_SetPixelToTexture (const int x, const int y,
 							    GRRLIB_texture *tex, const u32 color) {
 	u32  offs;
@@ -76,7 +76,7 @@ void  GRRLIB_SetPixelToTexture (const int x, const int y,
  * @param y The y-coordinate within the FB.
  * @return The color of a pixel in RGBA format.
  */
-INLINE
+static  inline
 u32 GRRLIB_GetPixelFromFB (int x, int y) {
 	u32 regval,val;
 
@@ -93,7 +93,7 @@ u32 GRRLIB_GetPixelFromFB (int x, int y) {
  * @param y The y-coordinate within the FB.
  * @param pokeColor The color of the pixel in RGBA format.
  */
-INLINE
+static  inline
 void GRRLIB_SetPixelToFB (int x, int y, u32 pokeColor) {
 	u32 regval;
 

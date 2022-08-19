@@ -28,10 +28,10 @@ THE SOFTWARE.
 /**
  * Reset the clipping to normal.
  */
-INLINE
+static  inline
 void  GRRLIB_ClipReset (void) {
     GX_SetClipMode( GX_CLIP_ENABLE );
-    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+    GX_SetScissor( 0, 0, GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight );
 }
 
 /**
@@ -41,7 +41,7 @@ void  GRRLIB_ClipReset (void) {
  * @param width The width of the rectangle.
  * @param height The height of the rectangle.
  */
-INLINE
+static  inline
 void  GRRLIB_ClipDrawing (const int x, const int y,
                           const int width, const int height) {
     GX_SetClipMode( GX_CLIP_ENABLE );

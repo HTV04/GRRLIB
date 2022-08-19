@@ -22,9 +22,6 @@ THE SOFTWARE.
 
 #include <grrlib-mod.h>
 
-extern Mtx GXmodelView2D;
-extern guVector axis2D;
-
 /**
  * Get the current matrix as a new matrix object.
  * @return A handle to the matrix object.
@@ -33,7 +30,7 @@ extern guVector axis2D;
 GRRLIB_matrix GRRLIB_GetMatrix (void) {
     GRRLIB_matrix matrixObject;
 
-    guMtxCopy(GXmodelView2D, matrixObject.matrix);
+    guMtxCopy(GRRLIB_View2D, matrixObject.matrix);
 
     return matrixObject;
 }
@@ -43,7 +40,7 @@ GRRLIB_matrix GRRLIB_GetMatrix (void) {
  * @param matrixObject The matrix object to set the matrix with.
  */
 void GRRLIB_SetMatrix (GRRLIB_matrix *matrixObject) {
-    guMtxCopy(matrixObject->matrix, GXmodelView2D);
+    guMtxCopy(matrixObject->matrix, GRRLIB_View2D);
     GX_LoadPosMtxImm(matrixObject->matrix, GX_PNMTX0);
 }
 
@@ -58,8 +55,8 @@ void GRRLIB_Scale (f32 scaleX, f32 scaleY) {
     guMtxIdentity(m);
     guMtxScaleApply(m, m, scaleX, scaleY, 1.0);
 
-    guMtxConcat(GXmodelView2D, m, GXmodelView2D);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxConcat(GRRLIB_View2D, m, GRRLIB_View2D);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }
 
 /**
@@ -69,10 +66,10 @@ void GRRLIB_Scale (f32 scaleX, f32 scaleY) {
 void GRRLIB_Rotate (f32 degrees) {
     Mtx m;
 
-    guMtxRotAxisDeg(m, &axis2D, degrees);
+    guMtxRotAxisDeg(m, &GRRLIB_Axis2D, degrees);
 
-    guMtxConcat(GXmodelView2D, m, GXmodelView2D);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxConcat(GRRLIB_View2D, m, GRRLIB_View2D);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }
 
 /**
@@ -86,8 +83,8 @@ void GRRLIB_Translate (f32 posX, f32 posY) {
     guMtxIdentity(m);
     guMtxTransApply(m, m, posX, posY, 0.0);
 
-    guMtxConcat(GXmodelView2D, m, GXmodelView2D);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxConcat(GRRLIB_View2D, m, GRRLIB_View2D);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }
 
 /**
@@ -103,12 +100,12 @@ void GRRLIB_Transform (f32 scaleX, f32 scaleY, f32 degrees, f32 posX, f32 posY) 
 
     guMtxIdentity(m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    guMtxRotAxisDeg(m2, &axis2D, degrees);
+    guMtxRotAxisDeg(m2, &GRRLIB_Axis2D, degrees);
     guMtxConcat(m1, m2, m);
     guMtxTransApply(m, m, posX, posY, 0.0);
 
-    guMtxConcat(GXmodelView2D, m, GXmodelView2D);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxConcat(GRRLIB_View2D, m, GRRLIB_View2D);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }
 
 /**
@@ -126,17 +123,17 @@ void GRRLIB_TransformInv (f32 scaleX, f32 scaleY, f32 posX, f32 posY, f32 degree
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
     guMtxTransApply(m2, m2, posX, posY, 0.0);
     guMtxConcat(m1, m2, m);
-    guMtxRotAxisDeg(m, &axis2D, degrees);
+    guMtxRotAxisDeg(m, &GRRLIB_Axis2D, degrees);
 
-    guMtxConcat(GXmodelView2D, m, GXmodelView2D);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxConcat(GRRLIB_View2D, m, GRRLIB_View2D);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }
 
 /**
  * Reset the current matrix.
  */
 void GRRLIB_Origin (void) {
-    guMtxIdentity(GXmodelView2D);
-    guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0, 0.0, -100.0);
-    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+    guMtxIdentity(GRRLIB_View2D);
+    guMtxTransApply(GRRLIB_View2D, GRRLIB_View2D, 0.0, 0.0, -100.0);
+    GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 }

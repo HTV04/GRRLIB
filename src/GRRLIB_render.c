@@ -24,10 +24,6 @@ THE SOFTWARE.
 
 #include <grrlib-mod.h>
 
-extern  GRRLIB_drawSettings  GRRLIB_Settings;
-extern  Mtx                  GXmodelView2D;
-extern  guVector             axis2D;
-
 /**
  * Draw a texture.
  * @param xPos Specifies the x-coordinate of the upper-left corner.
@@ -64,14 +60,14 @@ void  GRRLIB_DrawTexturePart (const f32 xPos, const f32 yPos, const GRRLIB_textu
 	GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
 	GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
-	guMtxRotAxisDeg(m1, &axis2D, degrees);
+	guMtxRotAxisDeg(m1, &GRRLIB_Axis2D, degrees);
 	guMtxIdentity(m2);
 	guMtxTransApply(m2, m2, -offsetX, -offsetY, 0.0);
 	guMtxScaleApply(m2, m2, scaleX, scaleY, 1.0);
 	guMtxConcat(m1, m2, m);
 
 	guMtxTransApply(m, m, xPos, yPos, 0.0);
-	guMtxConcat(GXmodelView2D, m, mv);
+	guMtxConcat(GRRLIB_View2D, m, mv);
 
 	GX_LoadPosMtxImm(mv, GX_PNMTX0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
@@ -91,7 +87,7 @@ void  GRRLIB_DrawTexturePart (const f32 xPos, const f32 yPos, const GRRLIB_textu
 		GX_Color1u32   (GRRLIB_Settings.color);
 		GX_TexCoord2f32(texPart->x, texPart->height);
 	GX_End();
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 
 	GX_SetTevOp  (GX_TEVSTAGE0, GX_PASSCLR);
 	GX_SetVtxDesc(GX_VA_TEX0,   GX_NONE);
@@ -122,9 +118,9 @@ void  GRRLIB_DrawTextureQuad (const guVector pos[4], GRRLIB_texImg *tex) {
 
 	guMtxIdentity  (m1);
 	guMtxScaleApply(m1, m1, 1, 1, 1.0);
-	guMtxRotAxisDeg(m2, &axis2D, 0);
+	guMtxRotAxisDeg(m2, &GRRLIB_Axis2D, 0);
 	guMtxConcat    (m2, m1, m);
-	guMtxConcat    (GXmodelView2D, m, mv);
+	guMtxConcat    (GRRLIB_View2D, m, mv);
 
 	GX_LoadPosMtxImm(mv, GX_PNMTX0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
@@ -144,7 +140,7 @@ void  GRRLIB_DrawTextureQuad (const guVector pos[4], GRRLIB_texImg *tex) {
 		GX_Color1u32   (color);
 		GX_TexCoord2f32(0, 1);
 	GX_End();
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 
 	GX_SetTevOp  (GX_TEVSTAGE0, GX_PASSCLR);
 	GX_SetVtxDesc(GX_VA_TEX0,   GX_NONE);
@@ -194,11 +190,11 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
 
 	guMtxIdentity  (m1);
 	guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
-	guMtxRotAxisDeg(m2, &axis2D, degrees);
+	guMtxRotAxisDeg(m2, &GRRLIB_Axis2D, degrees);
 	guMtxConcat    (m2, m1, m);
 
 	guMtxTransApply(m, m, xpos, ypos, 0);
-	guMtxConcat(GXmodelView2D, m, mv);
+	guMtxConcat(GRRLIB_View2D, m, mv);
 
 	GX_LoadPosMtxImm(mv, GX_PNMTX0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
@@ -218,7 +214,7 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
 		GX_Color1u32   (color);
 		GX_TexCoord2f32(s1, t2);
 	GX_End();
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 
 	GX_SetTevOp  (GX_TEVSTAGE0, GX_PASSCLR);
 	GX_SetVtxDesc(GX_VA_TEX0,   GX_NONE);
@@ -258,9 +254,9 @@ void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const int 
 
 	guMtxIdentity  (m1);
 	guMtxScaleApply(m1, m1, 1, 1, 1.0f);
-	guMtxRotAxisDeg(m2, &axis2D, 0);
+	guMtxRotAxisDeg(m2, &GRRLIB_Axis2D, 0);
 	guMtxConcat    (m2, m1, m);
-	guMtxConcat    (GXmodelView2D, m, mv);
+	guMtxConcat    (GRRLIB_View2D, m, mv);
 
 	GX_LoadPosMtxImm(mv, GX_PNMTX0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
@@ -280,7 +276,7 @@ void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const int 
 		GX_Color1u32   (color);
 		GX_TexCoord2f32(s1, t2);
 	GX_End();
-	GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+	GX_LoadPosMtxImm(GRRLIB_View2D, GX_PNMTX0);
 
 	GX_SetTevOp  (GX_TEVSTAGE0, GX_PASSCLR);
 	GX_SetVtxDesc(GX_VA_TEX0,   GX_NONE);
@@ -293,17 +289,17 @@ void  GRRLIB_Render (void) {
 	GX_DrawDone();          // Tell the GX engine we are done drawing
 	GX_InvalidateTexAll();
 
-	fb ^= 1;  // Toggle framebuffer index
+	GRRLIB_FB ^= 1;  // Toggle framebuffer index
 
 	GX_SetZMode      (GX_TRUE, GX_LEQUAL, GX_TRUE);
 	GX_SetColorUpdate(GX_TRUE);
-	GX_CopyDisp      (xfb[fb], GX_TRUE);
+	GX_CopyDisp      (GRRLIB_XFB[GRRLIB_FB], GX_TRUE);
 
-	VIDEO_SetNextFramebuffer(xfb[fb]);  // Select eXternal Frame Buffer
+	VIDEO_SetNextFramebuffer(GRRLIB_XFB[GRRLIB_FB]);  // Select eXternal Frame Buffer
 	VIDEO_Flush();                      // Flush video buffer to screen
 	VIDEO_WaitVSync();                  // Wait for screen to update
 	// Interlaced screens require two frames to update
-	if (rmode->viTVMode &VI_NON_INTERLACE) {
+	if (GRRLIB_VideoMode->viTVMode &VI_NON_INTERLACE) {
 		VIDEO_WaitVSync();
 	}
 }

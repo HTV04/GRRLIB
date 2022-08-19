@@ -126,3 +126,15 @@ void  GRRLIB_Rectangle (const f32 x,      const f32 y,
 		GX_End();
 	}
 }
+
+/**
+ * Draw a circle.
+ * @param x Specifies the x-coordinate of the circle.
+ * @param y Specifies the y-coordinate of the circle.
+ * @param radius The radius of the circle.
+ * @param filled Set to @c true to fill the circle.
+ */
+void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
+					 const bool filled) {
+	GRRLIB_Ellipse(x, y, radius, radius, filled);
+}

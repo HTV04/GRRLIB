@@ -25,27 +25,28 @@ THE SOFTWARE.
 #include <grrlib-mod.h>
 
 /**
- * Draw a circle.
+ * Draw an ellipse.
  * @author Dark_Link
- * @param x Specifies the x-coordinate of the circle.
- * @param y Specifies the y-coordinate of the circle.
- * @param radius The radius of the circle.
- * @param filled Set to @c true to fill the circle.
+ * @param x Specifies the x-coordinate of the ellipse.
+ * @param y Specifies the y-coordinate of the ellipse.
+ * @param radiusX The X radius of the ellipse.
+ * @param radiusY The Y radius of the ellipse.
+ * @param filled Set to @c true to fill the ellipse.
  */
-void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
-					 const u8 filled) {
+void  GRRLIB_Ellipse (const f32 x, const f32 y,
+                      const f32 radiusX, const f32 radiusY,
+					  const bool filled) {
 	guVector v[36];
 	u32 ncolor[36];
 	const f32 G_DTOR = M_DTOR * 10;
-	u32 color = GRRLIB_Settings.color;
 
 	for (u32 a = 0; a < 36; a++) {
     	const f32 ra = a * G_DTOR;
 
-		v[a].x = cos(ra) * radius + x;
-		v[a].y = sin(ra) * radius + y;
+		v[a].x = cos(ra) * radiusX + x;
+		v[a].y = sin(ra) * radiusY + y;
 		v[a].z = 0.0f;
-		ncolor[a] = color;
+		ncolor[a] = GRRLIB_Settings.color;
 	}
 
 	if (filled == false) {

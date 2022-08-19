@@ -47,55 +47,57 @@ THE SOFTWARE.
 // GRRLIB_clipping.h - Clipping control
 static  inline  void  GRRLIB_ClipReset   (void);
 static  inline  void  GRRLIB_ClipDrawing (const int x, const int y,
-                                  const int width, const int height);
+                                          const int width, const int height);
 
 //------------------------------------------------------------------------------
 // GRRLIB_collision.h - Collision detection
 static  inline  bool  GRRLIB_PtInRect   (const int hotx,   const int hoty,
-                                 const int hotw,   const int hoth,
-                                 const int wpadx,  const int wpady);
+                                         const int hotw,   const int hoth,
+                                         const int wpadx,  const int wpady);
 
 static  inline  bool  GRRLIB_RectInRect (const int rect1x, const int rect1y,
-                                 const int rect1w, const int rect1h,
-                                 const int rect2x, const int rect2y,
-                                 const int rect2w, const int rect2h);
+                                         const int rect1w, const int rect1h,
+                                         const int rect2x, const int rect2y,
+                                         const int rect2w, const int rect2h);
 
 static  inline  bool  GRRLIB_RectOnRect (const int rect1x, const int rect1y,
-                                 const int rect1w, const int rect1h,
-                                 const int rect2x, const int rect2y,
-                                 const int rect2w, const int rect2h);
+                                         const int rect1w, const int rect1h,
+                                         const int rect2x, const int rect2y,
+                                         const int rect2w, const int rect2h);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbComplex.h -
 static  inline  void  GRRLIB_NPlot       (const guVector v[], const u32 color[],
-                                  const long n);
+                                          const long n);
 static  inline  void  GRRLIB_NGone       (const guVector v[], const u32 color[],
-                                  const long n);
+                                          const long n);
 static  inline  void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[],
-                                  const long n);
+                                          const long n);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbGX.h -
 static  inline  void  GRRLIB_GXEngine (const guVector v[], const u32 color[],
-                               const long n,       const u8 fmt);
+                                       const long n,       const u8 fmt);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbSimple.h -
 static  inline  void  GRRLIB_FillScreen (const u32 color);
 static  inline  void  GRRLIB_Plot       (const f32 x,  const f32 y);
 static  inline  void  GRRLIB_Line       (const f32 x1, const f32 y1,
-                                 const f32 x2, const f32 y2);
+                                         const f32 x2, const f32 y2);
 static  inline  void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
-                                 const f32 width,  const f32 height,
-                                 const bool filled);
+                                         const f32 width,  const f32 height,
+                                         const bool filled);
+static  inline  void  GRRLIB_Circle     (const f32 x,      const f32 y,
+                                         const f32 radius, const bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
 static  inline  u32   GRRLIB_GetPixelFromTexture (const int x, const int y,
-                                          const GRRLIB_texture *tex);
+                                                  const GRRLIB_texture *tex);
 
 static  inline  void  GRRLIB_SetPixelToTexture   (const int x, const int y,
-                                          GRRLIB_texture *tex, const u32 color);
+                                                  GRRLIB_texture *tex, const u32 color);
 
 static  inline u32 GRRLIB_GetPixelFromFB (int x, int y);
 static  inline void GRRLIB_SetPixelToFB  (int x, int y, u32 pokeColor);

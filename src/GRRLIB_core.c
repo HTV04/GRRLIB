@@ -194,7 +194,8 @@ int  GRRLIB_Init (void) {
 	GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
 	GX_SetColorUpdate(GX_ENABLE);
 	GX_SetCullMode(GX_CULL_NONE);
-	GRRLIB_ClipReset();
+	GX_SetClipMode(GX_CLIP_ENABLE);
+	GRRLIB_ResetScissor();
 
 	// Default settings
 	GRRLIB_Settings.color     = 0xFFFFFFFF;

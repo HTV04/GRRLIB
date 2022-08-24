@@ -45,9 +45,11 @@ THE SOFTWARE.
 
 //------------------------------------------------------------------------------
 // GRRLIB_clipping.h - Clipping control
-static inline void  GRRLIB_ClipReset   (void);
-static inline void  GRRLIB_ClipDrawing (const int x, const int y,
-                                          const int width, const int height);
+static inline void  GRRLIB_ResetScissor  (void);
+static inline void  GRRLIB_SetScissor  (const unsigned int x, const unsigned int y,
+                                        const unsigned int width, const unsigned int height);
+static inline void  GRRLIB_GetScissor  (unsigned int *x, unsigned int *y,
+                                        unsigned int *width, unsigned int *height);
 
 //------------------------------------------------------------------------------
 // GRRLIB_collision.h - Collision detection
@@ -66,30 +68,14 @@ static inline bool  GRRLIB_RectOnRect (const int rect1x, const int rect1y,
                                          const int rect2w, const int rect2h);
 
 //------------------------------------------------------------------------------
-// GRRLIB_fbComplex.h -
-static inline void  GRRLIB_NPlot       (const guVector v[], const u32 color[],
-                                          const long n);
-static inline void  GRRLIB_NGone       (const guVector v[], const u32 color[],
-                                          const long n);
-static inline void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[],
-                                          const long n);
-
-//------------------------------------------------------------------------------
-// GRRLIB_fbGX.h -
-static inline void  GRRLIB_GXEngine (const guVector v[], const u32 color[],
-                                       const long n,       const u8 fmt);
-
-//------------------------------------------------------------------------------
-// GRRLIB_fbSimple.h -
-static inline void  GRRLIB_FillScreen (const u32 color);
-static inline void  GRRLIB_Plot       (const f32 x,  const f32 y);
-static inline void  GRRLIB_Line       (const f32 x1, const f32 y1,
-                                         const f32 x2, const f32 y2);
-static inline void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
-                                         const f32 width,  const f32 height,
-                                         const bool filled);
-static inline void  GRRLIB_Circle     (const f32 x,      const f32 y,
-                                         const f32 radius, const bool filled);
+// GRRLIB_fb.h -
+static inline void  GRRLIB_SetBackgroundColor  (unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+static inline void  GRRLIB_Circle  (const f32 x,      const f32 y,
+                                    const f32 radius, const bool filled);
+static inline void  GRRLIB_Points  (const guVector v[], const u32 color[],
+                                   const long n);
+static inline void  GRRLIB_Polygon  (const guVector v[], const u32 color[],
+                                     const long n, bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
@@ -130,9 +116,7 @@ static inline void            GRRLIB_FreeTexturePart (GRRLIB_texturePart *textur
 //==============================================================================
 #include <grrlib-mod/GRRLIB_clipping.h>   // Clipping control
 #include <grrlib-mod/GRRLIB_collision.h>  // Collision detection
-#include <grrlib-mod/GRRLIB_fbComplex.h>  // Render to framebuffer: Complex primitives
-#include <grrlib-mod/GRRLIB_fbGX.h>       // Render to framebuffer: Simple GX wrapper
-#include <grrlib-mod/GRRLIB_fbSimple.h>   // Render to framebuffer: Simple primitives
+#include <grrlib-mod/GRRLIB_fb.h>         // Render to framebuffer
 #include <grrlib-mod/GRRLIB_pixel.h>      // Pixel manipulation
 #include <grrlib-mod/GRRLIB_settings.h>   // GRRLIB Settings
 #include <grrlib-mod/GRRLIB_texSetup.h>   // Setup for textures

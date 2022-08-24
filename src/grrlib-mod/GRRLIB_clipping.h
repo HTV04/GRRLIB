@@ -28,8 +28,7 @@ THE SOFTWARE.
 /**
  * Reset the clipping to normal.
  */
-static inline void  GRRLIB_ClipReset (void) {
-    GX_SetClipMode( GX_CLIP_ENABLE );
+static inline void  GRRLIB_ResetScissor (void) {
     GX_SetScissor( 0, 0, GRRLIB_VideoMode->fbWidth, GRRLIB_VideoMode->efbHeight );
 }
 
@@ -40,8 +39,19 @@ static inline void  GRRLIB_ClipReset (void) {
  * @param width The width of the rectangle.
  * @param height The height of the rectangle.
  */
-static inline void  GRRLIB_ClipDrawing (const int x, const int y,
-                          const int width, const int height) {
-    GX_SetClipMode( GX_CLIP_ENABLE );
+static inline void  GRRLIB_SetScissor (const unsigned int x, const unsigned int y,
+                                       const unsigned int width, const unsigned int height) {
     GX_SetScissor( x, y, width, height );
+}
+
+/**
+ * Get the clip rectangle coordinates.
+ * @param x The x-coordinate of the rectangle.
+ * @param y The y-coordinate of the rectangle.
+ * @param width The width of the rectangle.
+ * @param height The height of the rectangle.
+ */
+static inline void  GRRLIB_GetScissor (unsigned int *x, unsigned int *y,
+                                       unsigned int *width, unsigned int *height) {
+    GX_GetScissor( x, y, width, height );
 }

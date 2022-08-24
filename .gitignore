@@ -1,24 +1,15 @@
-# Folder
-/build/*
-
 # Compiler-generated binaries
-*.o
-*.d
-*.map
-
-# Executable file
-*.dol
-*.elf
+/src/*.o
+/src/*.d
+/src/*.map
 
 # Compiled static library
-*.a
+/src/*.a
 
-# Programmer's Notepad state file
-*.pnps
+# Visual Studio Code
+/.vscode/*
+!/.vscode/c_cpp_properties.json
 
 # Generated doxygen documentation
 /html
 /latex
-
-# Temporary file
-*.tmp

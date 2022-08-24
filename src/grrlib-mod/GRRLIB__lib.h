@@ -84,10 +84,19 @@ int   GRRLIB_Init (void);
 void  GRRLIB_Exit (void);
 
 //------------------------------------------------------------------------------
-// GRRLIB_fbAdvanced.c - Render to framebuffer: Advanced primitives
-void  GRRLIB_Ellipse (const f32 x, const f32 y,
-                      const f32 radiusX, const f32 radiusY,
-                      const bool filled);
+// GRRLIB_fb.c - Render to framebuffer: Advanced primitives
+void  GRRLIB_GXEngine (const guVector v[], const u32 color[],
+                       const long n,       const u8 fmt);
+void  GRRLIB_FillScreen (const u32 color);
+void  GRRLIB_Point  (const f32 x,  const f32 y);
+void  GRRLIB_Line  (const f32 x1, const f32 y1,
+                    const f32 x2, const f32 y2);
+void  GRRLIB_Rectangle  (const f32 x,      const f32 y,
+                         const f32 width,  const f32 height,
+                         const bool filled);
+void  GRRLIB_Ellipse  (const f32 x, const f32 y,
+                       const f32 radiusX, const f32 radiusY,
+                       const bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fileIO - File I/O (SD Card)
@@ -164,7 +173,6 @@ void GRRLIB_GeckoPrintf (const char *text, ...);
 
 //------------------------------------------------------------------------------
 // GRRLIB_3D.c - 3D functions for GRRLIB
-void GRRLIB_SetBackgroundColour(u8 r, u8 g, u8 b, u8 a);
 void GRRLIB_Camera3dSettings(f32 posx, f32 posy, f32 posz, f32 upx, f32 upy, f32 upz, f32 lookx, f32 looky, f32 lookz);
 void GRRLIB_3dMode(f32 minDist, f32 maxDist, f32 fov, bool texturemode, bool normalmode);
 void GRRLIB_2dMode();

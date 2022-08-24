@@ -35,17 +35,6 @@ static  guVector  _GRRaxisz = (guVector){0, 0, 1}; // NOT ever!
 static  Mtx       _ObjTransformationMtx;
 
 /**
- * Set the background parameter when screen is cleared.
- * @param r Red component.
- * @param g Green component.
- * @param b Blue component.
- * @param a Alpha component.
- */
-void GRRLIB_SetBackgroundColour(u8 r, u8 g, u8 b, u8 a) {
-	GX_SetCopyClear((GXColor){ r, g, b, a }, GX_MAX_Z24);
-}
-
-/**
  * Set the camera parameter (contributed by chris_c aka DaShAmAn).
  * @param posx x position of the camera.
  * @param posy y position of the camera.

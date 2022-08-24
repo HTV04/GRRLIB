@@ -21,9 +21,32 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
 /*
- * @file GRRLIB_fbComplex.h
- * Inline functions for complex (N-point) shape drawing.
+ * @file GRRLIB_fb.h
+ * Inline functions for drawing.
  */
+
+/**
+ * Set the background parameter when screen is cleared.
+ * @param r Red component.
+ * @param g Green component.
+ * @param b Blue component.
+ * @param a Alpha component.
+ */
+void GRRLIB_SetBackgroundColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+	GX_SetCopyClear((GXColor){r, g, b, a}, GX_MAX_Z24);
+}
+
+/**
+ * Draw a circle.
+ * @param x Specifies the x-coordinate of the circle.
+ * @param y Specifies the y-coordinate of the circle.
+ * @param radius The radius of the circle.
+ * @param filled Set to @c true to fill the circle.
+ */
+static inline  void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
+                                    const bool filled) {
+	GRRLIB_Ellipse(x, y, radius, radius, filled);
+}
 
 /**
  * Draw an array of points.
@@ -31,7 +54,7 @@ THE SOFTWARE.
  * @param color The color of the points in RGBA format.
  * @param n Number of points in the vector array.
  */
-static inline void  GRRLIB_NPlot (const guVector v[], const u32 color[], const long n) {
+static inline void  GRRLIB_Points (const guVector v[], const u32 color[], const long n) {
 	GRRLIB_GXEngine(v, color, n, GX_POINTS);
 }
 
@@ -40,17 +63,8 @@ static inline void  GRRLIB_NPlot (const guVector v[], const u32 color[], const l
  * @param v The vector containing the coordinates of the polygon.
  * @param color The color of the filled polygon in RGBA format.
  * @param n Number of points in the vector.
+ * @param filled Set to @c true to fill the polygon.
  */
-static inline void  GRRLIB_NGone (const guVector v[], const u32 color[], const long n) {
-	GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
-}
-
-/**
- * Draw a filled polygon.
- * @param v The vector containing the coordinates of the polygon.
- * @param color The color of the filled polygon in RGBA format.
- * @param n Number of points in the vector.
- */
-static inline void  GRRLIB_NGoneFilled (const guVector v[], const u32 color[], const long n) {
-	GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
+static inline void  GRRLIB_Polygon (const guVector v[], const u32 color[], const long n, bool filled) {
+	GRRLIB_GXEngine(v, color, n, (filled == true) ? GX_TRIANGLEFAN : GX_LINESTRIP);
 }

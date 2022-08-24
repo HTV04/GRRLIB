@@ -25,15 +25,6 @@ THE SOFTWARE.
  * Inline functions for configuring the GRRLIB settings.
  */
 
-#ifndef GX_BM_SUBTRACT
-	/**
-	 * Blending type.
-	 * libogc revision 4170 fixed a typographical error. GX_BM_SUBSTRACT was renamed GX_BM_SUBTRACT.
-	 * But for previous versions this define is needed.
-	 */
-	#define GX_BM_SUBTRACT GX_BM_SUBSTRACT
-#endif
-
 /**
  * Set drawing color.
  * @param color The drawing color to set.

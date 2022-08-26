@@ -65,6 +65,6 @@ static inline void  GRRLIB_Points (const guVector v[], const u32 color[], const 
  * @param n Number of points in the vector.
  * @param filled Set to @c true to fill the polygon.
  */
-static inline void  GRRLIB_Polygon (const guVector v[], const u32 color[], const long n, bool filled) {
-	GRRLIB_GXEngine(v, color, n, (filled == true) ? GX_TRIANGLEFAN : GX_LINESTRIP);
+static inline void  GRRLIB_Polygon (const guVector v[], const long n, bool filled) {
+	GRRLIB_GXEngine(v, NULL, n, (filled == true) ? GX_TRIANGLEFAN : GX_LINESTRIP);
 }

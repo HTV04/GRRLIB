@@ -33,12 +33,19 @@ THE SOFTWARE.
  */
 void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
                        const u8 fmt) {
-    GX_Begin(fmt, GX_VTXFMT0, n);
-    for (int i = 0; i < n; i++) {
-        GX_Position3f32(v[i].x, v[i].y, v[i].z);
-        GX_Color1u32(GRRLIB_Settings.color * color[i]);
-    }
-    GX_End();
+	GX_Begin(fmt, GX_VTXFMT0, n);
+	if (color == NULL) {
+		for (int i = 0; i < n; i++) {
+			GX_Position3f32(v[i].x, v[i].y, v[i].z);
+			GX_Color1u32(GRRLIB_Settings.color);
+		}
+	} else {
+		for (int i = 0; i < n; i++) {
+			GX_Position3f32(v[i].x, v[i].y, v[i].z);
+			GX_Color1u32(GRRLIB_Settings.color * ((double) color[i] / 0xFFFFFFFF));
+		}
+	}
+	GX_End();
 }
 
 /**
@@ -157,7 +164,6 @@ void  GRRLIB_Ellipse (const f32 x, const f32 y,
                       const f32 radiusX, const f32 radiusY,
 					  const bool filled) {
 	guVector v[36] = {{0.0}};
-	u32 ncolor[36] = {0xFFFFFFFF};
 	const f32 G_DTOR = M_DTOR * 10;
 
 	for (u32 a = 0; a < 36; a++) {
@@ -167,5 +173,5 @@ void  GRRLIB_Ellipse (const f32 x, const f32 y,
 		v[a].y = sin(ra) * radiusY + y;
 	}
 
-	GRRLIB_GXEngine(v, ncolor, 36, (filled == true) ? GX_TRIANGLEFAN : GX_LINESTRIP);
+	GRRLIB_GXEngine(v, NULL, 36, (filled == true) ? GX_TRIANGLEFAN : GX_LINESTRIP);
 }

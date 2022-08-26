@@ -74,8 +74,8 @@ static inline void  GRRLIB_Circle  (const f32 x,      const f32 y,
                                     const f32 radius, const bool filled);
 static inline void  GRRLIB_Points  (const guVector v[], const u32 color[],
                                    const long n);
-static inline void  GRRLIB_Polygon  (const guVector v[], const u32 color[],
-                                     const long n, bool filled);
+static inline void  GRRLIB_Polygon  (const guVector v[], const long n,
+                                     bool filled);
 
 //------------------------------------------------------------------------------
 // GRRLIB_pixel.h - Pixel manipulation
